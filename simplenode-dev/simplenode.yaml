@@ -24,7 +24,7 @@ spec:
         app: simplenode
         app.kubernetes.io/name: simplenodeservice
       annotations:
-        keptn.sh/app: simplenode-app
+        # keptn.sh/app: simplenode-app
         keptn.sh/workload: simplenode-workload
         keptn.sh/version: 1.0.2
         keptn.sh/post-deployment-tasks: notify
