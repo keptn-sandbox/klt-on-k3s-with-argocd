@@ -21,6 +21,8 @@ spec:
         app.kubernetes.io/part-of: "simplenodeproject"
         app.kubernetes.io/managed-by: Keptn
         app.kubernetes.io/version: 1.0.2
+      annotations:
+        keptn.sh/post-deployment-tasks: notify
     spec:
       containers:
       - name: simplenode

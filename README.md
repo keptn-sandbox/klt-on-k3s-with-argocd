@@ -16,12 +16,17 @@ Here is what I have installed
 4. Exposed Grafana, Jaeger and ArgoCD through Ingress
 
 
-# Running the demo
+# Preparing the demo
 
 If you want to use this demo in your environment you have to
 1. Fork this repo
 2. Specify your own correct domain in the Ingress objects defined in the simplenode-xxx yaml files!
 
+Also - the demo will push slack notifications - so - you need to create a secret like this
+```
+kubectl create secret generic slack-notification --from-literal=SECURE_DATA='{"slack_hook":<YOUR_HOOK>,"text":"Deployed Simplenode"}' -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
+kubectl apply -f tmp-slack-secret.yaml
+```
 
 ```
 git clone https://github.com/YOURFORKEDVERSION/klt-demo-with-argocd
