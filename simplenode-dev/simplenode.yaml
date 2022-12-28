@@ -1,3 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: simplenode-dev
+  annotations:
+    keptn.sh/lifecycle-toolkit: "enabled"  # this lines tells the webhook to handle the namespace
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
