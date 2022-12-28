@@ -100,7 +100,7 @@ metadata:
   name: simplenode
 spec:
   rules:
-    - host: simplenode_dev.54.244.137.234.nip.io
+    - host: simplenode-dev.54.244.137.234.nip.io
       http:
         paths:
           - path: /

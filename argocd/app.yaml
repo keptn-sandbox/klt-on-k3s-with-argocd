@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: simplenode_dev
+  name: simplenode-dev
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/grabnerandi/klt-demo-with-argocd
     targetRevision: main
-    path: simplenode_dev
+    path: simplenode-dev
   destination: 
     server: https://kubernetes.default.svc
-    namespace: simplenode_dev
+    namespace: simplenode-dev
   syncPolicy:
     automated:
       selfHeal: true
