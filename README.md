@@ -18,6 +18,13 @@ Here is what I have installed
 
 # Running the demo
 
+If you want to use this demo in your environment you have to
+1. Fork this repo
+2. Specify your own correct domain in the Ingress objects defined in the simplenode-xxx yaml files!
+
+
 ```
-kubectl apply -f https://raw.githubusercontent.com/grabnerandi/klt-demo-with-argocd/main/argocd/app.yaml
+git clone https://github.com/YOURFORKEDVERSION/klt-demo-with-argocd
+cd klt-demo-with-argocd
+kubectl apply -f ./argocd/app.yaml
 ```
