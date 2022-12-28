@@ -40,4 +40,4 @@ spec:
 
             console.log(resp)    
     secureParameters:
-      secret: slack-secret
+      secret: slack-notification
