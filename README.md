@@ -24,8 +24,10 @@ If you want to use this demo in your environment you have to
 
 Also - the demo will push slack notifications - so - you need to create a secret like this
 ```
-kubectl create secret generic slack-notification --from-literal=SECURE_DATA='{"slack_hook":<YOUR_HOOK>,"text":"Deployed Simplenode"}' -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
+export SLACK_HOOK=YOURHOOK/ABCDEF/ASDFASFASDFASF
+kubectl create secret generic slack-notification --from-literal=SECURE_DATA='{"slack_hook":$SLACK_HOOK,"text":"Deployed Simplenode"}' -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
 kubectl apply -f tmp-slack-secret.yaml
+rm tmp-slack-secret.yaml
 ```
 
 ```
