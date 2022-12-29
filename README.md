@@ -172,12 +172,12 @@ rm argocd-ingress_gen.yaml
 
 ARGOPWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
 echo "Access me via http://argocd.$INGRESS_DOMAIN"
-echo "Login with $ARGOPWD"
+echo "Login with admin/$ARGOPWD"
 
 ```
 
 **VALIDATE STEP**
-Open the link shown above. It should bring you to ArgoCD where you can login with the password provided in the output!
+Open the link shown above. It should bring you to ArgoCD where you can login with `admin` and the password provided in the output!
 
 
 ## 7. (Optional) Setup Slack Notification
@@ -187,22 +187,24 @@ For this you need a Slack Workspace with the installed Incoming Webhook Extensio
 ```
 export SLACK_HOOK=YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC
 kubectl create secret generic slack-notification --from-literal=SECURE_DATA='{"slack_hook":$SLACK_HOOK,"text":"Deployed Simplenode"}' -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
+kubectl create ns simplenode-dev
 kubectl apply -f tmp-slack-secret.yaml
 rm tmp-slack-secret.yaml
+
 ```
 
 ## 8. Lets Clone our Repo for ArgoCD
 
 ArgoCD has a concepts of projects and applications. One way is to define an ArgoCD App and let it point to a Git Repository that it then synchronizes to your K8s Cluster. To make this work everyone that runs this demo needs their own GitHub repository so that you can also modify your app definition, e.g: increase the version. Therefore you need to to the following
 
-1. FORK this GitHub repo in our own GitHub account, e.g: https://github.com/YOURACCOUNT/klt-demo-withargocd
+1. FORK this GitHub repo in our own GitHub account, e.g: https://github.com/yourgithubaccount/your-klt-demo-repo
 2. In the simplenode-xxx folders replace all occurences of domain.placeholder with the value in $INGRESS_DOMAIN
 3. Now run this
 
 
 ```
-export GITHUBACCOUNT=yourgithubaccount
-sed -e 's~gituser.placeholder~'"$GITHUBACCOUNT"'~' ./argocd/app-dev.yaml.tmp > app-dev.yaml
+export GITHUBREPO=yourgithubaccount/your-klt-demo-repo
+sed -e 's~gitrepo.placeholder~'"$GITHUBREPO"'~' ./argocd/app-dev.yaml.tmp > app-dev.yaml
 kubectl apply -f app-dev.yaml
 rm app-dev.yaml
 ```
