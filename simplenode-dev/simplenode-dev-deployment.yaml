@@ -20,12 +20,12 @@ spec:
       annotations:
         # keptn.sh/app: simplenode-app
         keptn.sh/workload: simplenode-workload
-        keptn.sh/version: 3.0.2
+        keptn.sh/version: 4.0.2
         keptn.sh/post-deployment-tasks: notify
     spec:
       containers:
       - name: simplenode
-        image: "grabnerandi/simplenodeservice:3.0.2"
+        image: "grabnerandi/simplenodeservice:4.0.2"
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
