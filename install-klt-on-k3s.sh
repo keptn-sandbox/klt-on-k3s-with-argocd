@@ -123,7 +123,7 @@ function setup_slacknotification {
         echo "STEP: Creating Slack Webhook Secret!"
         slack_hook_secret="{\"slack_hook\":\"${SLACK_HOOK}\",\"text\":\"Deployed Simplenode\"}"
         kubectl create secret generic slack-notification --from-literal=SECURE_DATA="$slack_hook_secret" -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
-        kubectl create ns simplenode-dev
+        kubectl create ns simplenode-dev | true
         kubectl apply -f tmp-slack-secret.yaml | true
         rm tmp-slack-secret.yaml
     fi 
@@ -134,7 +134,6 @@ function create_argocdapp {
         echo "SKIP STEP: No GITHUBREPO specified. Therefore not creating the ArgoCD App based on your git repo"
     else
         echo "STEP: Create ArgoCD app pointing to ${GITHUBREPO}"
-        export GITHUBREPO=yourgithubaccount/your-klt-demo-repo
         sed -e 's~gitrepo.placeholder~'"$GITHUBREPO"'~' ./argocd/app-dev.yaml.tmp > app-dev.yaml
         kubectl apply -f app-dev.yaml
         rm app-dev.yaml
@@ -142,12 +141,14 @@ function create_argocdapp {
 }
 
 function print_info {
+    echo " "
     echo "===================================================================="
     echo "                         INSTALLATION DONE"
     echo "===================================================================="
     echo "ArgoCD: http://argocd.$INGRESS_DOMAIN using admin/$ARGOPWD"
     echo "Grafana: http://grafana.$INGRESS_DOMAIN using admin/admin"
     echo "Jaeger: http://jaeger.$INGRESS_DOMAIN"
+    echo "===================================================================="
 }
 
 # now lets go through all the steps

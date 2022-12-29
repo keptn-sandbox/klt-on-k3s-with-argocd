@@ -9,7 +9,7 @@ install:
 	@echo "-----------------------------------"
 	@echo "Create Namespace and install ArgoCD"
 	@echo "-----------------------------------"
-	kubectl create namespace $(ARGO_NAMESPACE)
+	kubectl create namespace $(ARGO_NAMESPACE) | true
 	kubectl apply -n $(ARGO_NAMESPACE) -f https://raw.githubusercontent.com/argoproj/argo-cd/$(ARGO_VERSION)/manifests/install.yaml
 	kubectl apply -n $(ARGO_NAMESPACE) -f ./config/argocd-cm.yaml
 	kubectl apply -n $(ARGO_NAMESPACE) -f ./config/argocd-cmd-params-cm.yaml
