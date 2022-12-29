@@ -17,9 +17,10 @@ If you follow the demo instructions you will get
 4. ArgoCD based on [ArgoCD for KLT](https://github.com/keptn-sandbox/lifecycle-toolkit-examples/tree/main/support/argo)
 5. Exposed Grafana, Jaeger and ArgoCD through Ingress, e.g: grafana.1.2.3.4.nip.io
 
-# Installing the Demo
+# Manual Demo Installation: Step-by-Step
 
-At a later point I may add all those steps into a single script. But - for now I list each individual step
+The following are the 9 individual steps so you see how to setup everything up.
+If you want some help - go to the next section which uses the install-klt-on-k3s.sh.
 
 ## 1. k8s cluster
 
@@ -146,7 +147,7 @@ cd ../..
 sed -e 's~domain.placeholder~'"$INGRESS_DOMAIN"'~' ./setup/ingress/grafana-ingress.yaml.tmp > grafana-ingress_gen.yaml
 kubectl apply -f grafana-ingress_gen.yaml
 rm grafana-ingress_gen.yaml
-echo "Access me via http://grafana.$INGRESS_DOMAIN and http://jaeger.$INGRESS_DOMAIN
+echo "Access me via http://grafana.$INGRESS_DOMAIN and http://jaeger.$INGRESS_DOMAIN"
 
 ```
 
@@ -185,8 +186,7 @@ Open the link shown above. It should bring you to ArgoCD where you can login wit
 For this you need a Slack Workspace with the installed Incoming Webhook Extensions. Create a new Webhook Configuration and get the Webhook URL, e.g: https://hooks.slack.com/services/YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC. Then take the WebHook Part of that URL and do the following:
 
 ```
-export SLACK_HOOK=YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC
-kubectl create secret generic slack-notification --from-literal=SECURE_DATA='{"slack_hook":$SLACK_HOOK,"text":"Deployed Simplenode"}' -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
+kubectl create secret generic slack-notification --from-literal=SECURE_DATA='{"slack_hook":"YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC","text":"Deployed Simplenode"}' -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
 kubectl create ns simplenode-dev
 kubectl apply -f tmp-slack-secret.yaml
 rm tmp-slack-secret.yaml
@@ -199,11 +199,11 @@ ArgoCD has a concepts of projects and applications. One way is to define an Argo
 
 1. FORK this GitHub repo in our own GitHub account, e.g: https://github.com/yourgithubaccount/your-klt-demo-repo
 2. In the simplenode-xxx folders replace all occurences of domain.placeholder with the value in $INGRESS_DOMAIN
-3. Now run this
+3. Then export the repo identify to GITHUBREPO like this: `export GITHUBREPO=yourgithubaccount/your-klt-demo-repo`
 
+## 9. Create Argo App for our new repo
 
 ```
-export GITHUBREPO=yourgithubaccount/your-klt-demo-repo
 sed -e 's~gitrepo.placeholder~'"$GITHUBREPO"'~' ./argocd/app-dev.yaml.tmp > app-dev.yaml
 kubectl apply -f app-dev.yaml
 rm app-dev.yaml
@@ -214,6 +214,45 @@ You should now see the new App in ArgoCD and ArgoCD doing its work. If everythin
 2. Get a Slack Notification after the deployment is done
 3. Get data in the Keptn Grafana Dashboards
 4. See Open Telemetry Traces for the deployment
+
+# Automated Demo Installation
+
+## 1. Pre-Requ Steps
+Above steps can be mostly automated but you need to do this:
+**Do Step 2: Clone the Repo**
+```
+git clone https://github.com/grabnerandi/klt-demo-with-argocd
+cd klt-demo-with-argocd
+```
+
+**Do Step 8: Forke the Demo Repo**
+1. FORK this GitHub repo in our own GitHub account, e.g: https://github.com/yourgithubaccount/your-klt-demo-repo
+2. In the simplenode-xxx folders replace all occurences of domain.placeholder with the value in $INGRESS_DOMAIN
+Then
+```
+export GITHUBREPO=yourgithubaccount/your-klt-demo-repo
+```
+
+**Optionally Do this from Step 3: If you want to install Dynatrace OneAgent**
+```
+export DT_TENANT=abc12345.live.dynatrace.com
+export DT_OPERATOR_TOKEN=dt0c01.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXY
+export DT_INGEST_TOKEN=dt0c01.YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+```
+
+**Optionally Do this from Step 7: Export your Slack WebHook**
+```
+export SLACK_HOOK=YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC
+```
+
+## 2. Execute the script
+
+The script will install tools, k3s, observability, argocd and - depending on your other set env-variables OneAgent, Slack Integration and creates the ArgoCD App for the forked repository. 
+
+```
+install-klt-on-k3s.sh
+```
+
 
 # How to uninstall?
 
