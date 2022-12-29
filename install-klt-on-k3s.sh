@@ -62,7 +62,7 @@ function install_oneagent {
     kubectl -n dynatrace wait pod --for=condition=ready --selector=app.kubernetes.io/name=dynatrace-operator,app.kubernetes.io/component=webhook --timeout=300s
 
     kubectl -n dynatrace create secret generic keptn --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN"
-    sed -e 's~DT_TENANT~'"$DT_TENANT"'~' ./klt-demo-with-argocd/setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
+    sed -e 's~DT_TENANT~'"$DT_TENANT"'~' ./setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
     kubectl apply -f dynakube_10_tmp.yaml
     rm dynakube_10_tmp.yaml
 }
