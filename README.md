@@ -146,7 +146,7 @@ cd ../..
 sed -e 's~domain.placeholder~'"$INGRESS_DOMAIN"'~' ./setup/ingress/grafana-ingress.yaml.tmp > grafana-ingress_gen.yaml
 kubectl apply -f grafana-ingress_gen.yaml
 rm grafana-ingress_gen.yaml
-echo "Access me via http://grafana.$INGRESS_DOMAIN and http://jaeger.$INGRESS_DOMAIN
+echo "Access me via http://grafana.$INGRESS_DOMAIN and http://jaeger.$INGRESS_DOMAIN"
 
 ```
 
@@ -198,7 +198,8 @@ ArgoCD has a concepts of projects and applications. One way is to define an Argo
 
 1. FORK this GitHub repo in our own GitHub account, e.g: https://github.com/yourgithubaccount/your-klt-demo-repo
 2. In the simplenode-xxx folders replace all occurences of domain.placeholder with the value in $INGRESS_DOMAIN
-3. Now run this
+
+## 9. Create Argo App for our new repo
 
 
 ```
