@@ -10,9 +10,9 @@ install:
 	@echo "Create Namespace and install ArgoCD"
 	@echo "-----------------------------------"
 	kubectl create namespace $(ARGO_NAMESPACE)
+	kubectl apply -n $(ARGO_NAMESPACE) -f https://raw.githubusercontent.com/argoproj/argo-cd/$(ARGO_VERSION)/manifests/install.yaml
 	kubectl apply -n $(ARGO_NAMESPACE) -f ./config/argocd-cm.yaml
 	kubectl apply -n $(ARGO_NAMESPACE) -f ./config/argocd-cmd-params-cm.yaml
-	kubectl apply -n $(ARGO_NAMESPACE) -f https://raw.githubusercontent.com/argoproj/argo-cd/$(ARGO_VERSION)/manifests/install.yaml
 
 	@echo ""
 	@echo "-------------------------------"
@@ -23,32 +23,10 @@ install:
 	kubectl wait --for=condition=available deployment/argocd-repo-server -n "$(ARGO_NAMESPACE)" --timeout=120s
 	kubectl wait --for=condition=available deployment/argocd-server  -n "$(ARGO_NAMESPACE)" --timeout=120s
 
-
 	@echo ""
 	@echo "#######################################################"
 	@echo "ArgoCD Demo installed"
-	@echo "- Get Admin Password: make argo-get-password"
-	@echo "- Port-Forward ArgoCD: make port-forward-argocd"
-	@echo "- Get Argo CLI: https://argo-cd.readthedocs.io/en/stable/cli_installation/"
-	@echo "- Configure ArgoCD CLI (needs port-forward): make argo-configure-cli"
 	@echo "#######################################################"
-
-.PHONY: argo-configure-cli
-argo-configure-cli:
-	@argocd login localhost:8080 --username admin --password $(ARGO_SECRET) --insecure
-
-.PHONY: argo-get-password
-argo-get-password:
-	@echo $(ARGO_SECRET)
-
-.PHONY: port-forward-argocd
-port-forward-argocd:
-	@echo ""
-	@echo "Open ArgoCD in your Browser: http://localhost:8080"
-	@echo "CTRL-c to stop port-forward"
-
-	@echo ""
-	kubectl port-forward svc/argocd-server -n "$(ARGO_NAMESPACE)" 8080:443
 
 .PHONY: uninstall
 uninstall:

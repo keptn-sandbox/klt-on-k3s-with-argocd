@@ -14,8 +14,8 @@ DT_TENANT=${DT_TENANT:-none}
 DT_OPERATOR_TOKEN=${DT_OPERATOR_TOKEN:-none}
 DT_INGEST_TOKEN=${DT_INGEST_TOKEN:-none}
 
-# Shall we setup the Slack Webhook integration? if so - set SLACK_WEBHOOK=YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC
-SLACK_WEBHOOK=${SLACK_WEBHOOK:-none}
+# Shall we setup the Slack Webhook integration? if so - set SLACK_HOOK=YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC
+SLACK_HOOK=${SLACK_HOOK:-none}
 
 # Create Argo App based on your forked Git repo? Then set GITHUBREPO=yourgithubaccount/your-klt-demo-repo
 GITHUBREPO=${GITHUBREPO:-none}
@@ -37,6 +37,15 @@ function install_k3s {
     if [[ "${INSTALL_K3S}" == "true" ]]; then
         echo "STEP: Installing k3s"
         sudo curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644"  sh -
+
+        # now lets make sure k3s is fully started
+        k3s_started=false
+        while [[ ! "${k3s_started}" ]]; do
+            sleep 5
+            if kubectl get nodes; then
+            k3s_started=true
+            fi
+        done
     else
         echo "SKIP STEP: Not installing k3s. Assuming k8s cluster is ready and kubectl has context!"
     fi 
@@ -63,7 +72,7 @@ function install_oneagent {
     sleep 10
     kubectl -n dynatrace wait pod --for=condition=ready --selector=app.kubernetes.io/name=dynatrace-operator,app.kubernetes.io/component=webhook --timeout=300s
 
-    kubectl -n dynatrace create secret generic keptn --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN"
+    kubectl -n dynatrace create secret generic keptn --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN" | true
     sed -e 's~DT_TENANT~'"$DT_TENANT"'~' ./setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
     kubectl apply -f dynakube_10_tmp.yaml
     rm dynakube_10_tmp.yaml
@@ -106,14 +115,14 @@ function install_argocd {
 }
 
 function setup_slacknotification {
-    if [[ "${SLACK_WEBHOOK}" == "none" ]]; then
-        echo "SKIP STEP: No SLACK_WEBHOOK specified. Therefore not configuring slack webhook secret"
+    if [[ "${SLACK_HOOK}" == "none" ]]; then
+        echo "SKIP STEP: No SLACK_HOOK specified. Therefore not configuring slack webhook secret"
     else
         echo "STEP: Creating Slack Webhook Secret!"
-        secret = "{\"slack_hook\":\"${SLACK_WEBHOOK}\",\"text\":\"Deployed Simplenode\"}"
+        secret = "{\"slack_hook\":\"${SLACK_HOOK}\",\"text\":\"Deployed Simplenode\"}"
         kubectl create secret generic slack-notification --from-literal=SECURE_DATA="$secret" -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
         kubectl create ns simplenode-dev
-        kubectl apply -f tmp-slack-secret.yaml
+        kubectl apply -f tmp-slack-secret.yaml | true
         rm tmp-slack-secret.yaml
     fi 
 }
@@ -130,6 +139,15 @@ function create_argocdapp {
     fi 
 }
 
+function print_info {
+    echo "===================================================================="
+    echo "                         INSTALLATION DONE"
+    echo "===================================================================="
+    echo "ArgoCD: http://argocd.$INGRESS_DOMAIN using admin/$ARGOPWD"
+    echo "Grafana: http://grafana.$INGRESS_DOMAIN using admin/admin"
+    echo "Jaeger: http://jaeger.$INGRESS_DOMAIN"
+}
+
 # now lets go through all the steps
 install_tools
 install_k3s
@@ -140,3 +158,4 @@ install_observabilty
 install_argocd
 setup_slacknotification
 create_argocdapp
+print_info

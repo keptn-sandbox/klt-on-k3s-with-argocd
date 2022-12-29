@@ -61,34 +61,7 @@ install:
 	@echo ""
 	@echo "#######################################################"
 	@echo "Observability Demo installed"
-	@echo "- Port-Forward Grafana: make port-forward-grafana"
 	@echo "#######################################################"
-
-.PHONY: port-forward-jaeger
-port-forward-jaeger:
-	@echo ""
-	@echo "Open Jaeger in your Browser: http://localhost:16686"
-	@echo "CTRL-c to stop port-forward"
-
-	@echo ""
-	kubectl port-forward -n "$(TOOLKIT_NAMESPACE)" svc/jaeger-query 16686
-
-
-.PHONY: port-forward-prometheus
-port-forward-prometheus:
-	@echo ""
-	@echo "Open Prometheus in your Browser: http://localhost:9090"
-	@echo "CTRL-c to stop port-forward"
-	@echo ""
-	kubectl -n monitoring port-forward svc/prometheus-k8s 9090
-
-.PHONY: port-forward-grafana
-port-forward-grafana:
-	@echo ""
-	@echo "Open Grafana in your Browser: http://localhost:$(GRAFANA_PORT_FORWARD)"
-	@echo "CTRL-c to stop port-forward"
-	@echo ""
-	kubectl -n monitoring port-forward svc/grafana $(GRAFANA_PORT_FORWARD):3000
 
 .PHONY: import-grafana-dashboard
 import-grafana-dashboard:
