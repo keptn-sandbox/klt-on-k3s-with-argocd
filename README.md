@@ -84,7 +84,7 @@ Either
 3. export your tenant_id, operator and data ingest token and then follow the following instructions
 
 ```
-export DT_TENANT=https://abc12345.live.dynatrace.com
+export DT_TENANT=abc12345.live.dynatrace.com
 export DT_OPERATOR_TOKEN=dt0c01.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXY
 export DT_INGEST_TOKEN=dt0c01.YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
 
@@ -92,7 +92,7 @@ kubectl create namespace dynatrace
 kubectl apply -f https://github.com/Dynatrace/dynatrace-operator/releases/download/v0.10.1/kubernetes.yaml
 kubectl -n dynatrace wait pod --for=condition=ready --selector=app.kubernetes.io/name=dynatrace-operator,app.kubernetes.io/component=webhook --timeout=300s
 
-kubectl -n dynatrace create secret generic dynakube --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN"
+kubectl -n dynatrace create secret generic keptn --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN"
 sed -e 's~DT_TENANT~'"$DT_TENANT"'~' ./klt-demo-with-argocd/setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
 kubectl apply -f dynakube_10_tmp.yaml
 rm dynakube_10_tmp.yaml
