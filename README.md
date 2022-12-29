@@ -185,8 +185,7 @@ Open the link shown above. It should bring you to ArgoCD where you can login wit
 For this you need a Slack Workspace with the installed Incoming Webhook Extensions. Create a new Webhook Configuration and get the Webhook URL, e.g: https://hooks.slack.com/services/YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC. Then take the WebHook Part of that URL and do the following:
 
 ```
-export SLACK_HOOK=YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC
-kubectl create secret generic slack-notification --from-literal=SECURE_DATA='{"slack_hook":$SLACK_HOOK,"text":"Deployed Simplenode"}' -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
+kubectl create secret generic slack-notification --from-literal=SECURE_DATA='{"slack_hook":"YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC","text":"Deployed Simplenode"}' -n simplenode-dev -oyaml --dry-run=client > tmp-slack-secret.yaml
 kubectl create ns simplenode-dev
 kubectl apply -f tmp-slack-secret.yaml
 rm tmp-slack-secret.yaml
