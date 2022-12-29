@@ -11,7 +11,7 @@ The purpose is experiment with KLT on some simple demo apps and show different U
 # Demo Setup Explained
 
 If you follow the demo instructions you will get
-1. k3s on an AWS Linux with Traefik Ingress Controller
+1. k8s cluster: If you dont have one you just need a Linux machine!
 2. KLT based on [Getting Started with KLT](https://lifecycle.keptn.sh/docs/getting-started/)
 3. Observability (Grafana, Prometheus, Jaeger) based on [Observability for KLT](https://github.com/keptn-sandbox/lifecycle-toolkit-examples/tree/main/support/observability) 
 4. ArgoCD based on [ArgoCD for KLT](https://github.com/keptn-sandbox/lifecycle-toolkit-examples/tree/main/support/argo)
@@ -21,14 +21,15 @@ If you follow the demo instructions you will get
 
 At a later point I may add all those steps into a single script. But - for now I list each individual step
 
-## 1. (optional) k3s on AWS EC2
+## 1. k8s cluster
 
-If you already have a cluster then you are good. The only thing to do is set the INGRESS_DOMAIN env-variable to your domain name or simple the local IP + nip.io. Like this
+**If you already have a cluster** then you are good. Just make sure that you have an ingress controller (Traefik, Nginx, ...) installed that handles inbound traffic on the public IP of your machine. If you already have a wildcard DNS for your ingress then great - otherwise we will use nip.io as a free DNS service. This allows us to later access our demo services via e.g: argocd.yourIP.nip.io or grafana.yourIP.nip.io
+Please export your ingress domain like this:
 ```
 export INGRESS_DOMAIN=11.22.33.44.nip.io
 ```
 
-If you do not have a cluster then here is how I setup my demo cluster.
+**If you do not have a cluster** then here is how I setup my demo cluster:
 I use an AWS EC2 Instance with Amazon Linux 2 with the following properties:
 ```
 Instance Type: t3.2xlarge
@@ -52,9 +53,19 @@ sudo yum install docker
 sudo curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644"  sh -
 ```
 
-**Set public IP as Ingress Domain**
+**Set public IP as Ingress Domain (+nip.io)**
 ```
 export INGRESS_DOMAIN=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4).nip.io
+```
+
+**VALIDATE STEP 1**
+
+Run `kubectl get nodes` and wait until the status of your node is ready. 
+It should look something like this: 
+```
+$ kubectl get nodes
+NAME                                          STATUS   ROLES                  AGE    VERSION
+ip-1xx-3x-4x-1xx.us-west-x.compute.internal   Ready    control-plane,master   109s   v1.25.4+k3s1
 ```
 
 ## 2. Clone this git repo
@@ -73,14 +84,16 @@ Either
 3. export your tenant_id, operator and data ingest token and then follow the following instructions
 
 ```
-sed -e 's~DT_TENANT~'"$DT_TENANT"'~' \
--e 's~DT_OPERATOR_TOKEN~'"$DT_OPERATOR_TOKEN"'~' \
--e 's~DT_INGEST_TOKEN~'"$DT_INGEST_TOKEN"'~' \
-./klt-demo-with-argocd/setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
+export DT_TENANT=https://abc12345.live.dynatrace.com
+export DT_OPERATOR_TOKEN=dt0c01.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXY
+export DT_INGEST_TOKEN=dt0c01.YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
 
 kubectl create namespace dynatrace
 kubectl apply -f https://github.com/Dynatrace/dynatrace-operator/releases/download/v0.10.1/kubernetes.yaml
 kubectl -n dynatrace wait pod --for=condition=ready --selector=app.kubernetes.io/name=dynatrace-operator,app.kubernetes.io/component=webhook --timeout=300s
+
+kubectl -n dynatrace create secret generic dynakube --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN"
+sed -e 's~DT_TENANT~'"$DT_TENANT"'~' ./klt-demo-with-argocd/setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
 kubectl apply -f dynakube_10_tmp.yaml
 rm dynakube_10_tmp.yaml
 ```
