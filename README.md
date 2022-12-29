@@ -169,3 +169,10 @@ You should now see the new App in ArgoCD and ArgoCD doing its work. If everythin
 2. Get a Slack Notification after the deployment is done
 3. Get data in the Keptn Grafana Dashboards
 4. See Open Telemetry Traces for the deployment
+
+# How to uninstall?
+
+If you installed the k3s cluster then simply execute
+```
+k3s-uninstall.sh
+```

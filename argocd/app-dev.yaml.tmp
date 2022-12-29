@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/grabnerandi/klt-demo-with-argocd
+    repoURL: https://github.com/gituser.placeholder/klt-demo-with-argocd
     targetRevision: main
     path: simplenode-dev
   destination: 

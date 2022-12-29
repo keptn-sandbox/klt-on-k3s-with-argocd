@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simplenode
+spec:
+  rules:
+    - host: simplenode-dev.domain.placeholder
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name:  simplenode
+                port:
+                  number: 80

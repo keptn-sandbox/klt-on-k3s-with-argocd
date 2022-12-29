@@ -1,14 +1,8 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: simplenode-dev
-  annotations:
-    keptn.sh/lifecycle-toolkit: "enabled"  # this lines tells the webhook to handle the namespace
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: simplenode
+  namespace: simplenode-dev
 spec:
   replicas: 1
   strategy:
@@ -97,20 +91,3 @@ spec:
     targetPort: 8080
   selector:
     app: simplenode
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: simplenode
-spec:
-  rules:
-    - host: simplenode-dev.54.244.137.234.nip.io
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name:  simplenode
-                port:
-                  number: 80
