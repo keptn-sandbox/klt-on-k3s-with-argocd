@@ -57,8 +57,10 @@ function install_oneagent {
     fi
 
     echo "STEP: Installing Dynatrace OneAgent for $DT_TENANT"
-    kubectl create namespace dynatrace
+    kubectl create namespace dynatrace | true
     kubectl apply -f https://github.com/Dynatrace/dynatrace-operator/releases/download/v0.10.1/kubernetes.yaml
+    # need to sleep to avoid a timing issue on k3s
+    sleep 10
     kubectl -n dynatrace wait pod --for=condition=ready --selector=app.kubernetes.io/name=dynatrace-operator,app.kubernetes.io/component=webhook --timeout=300s
 
     kubectl -n dynatrace create secret generic keptn --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN"
