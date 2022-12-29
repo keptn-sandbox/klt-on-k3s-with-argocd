@@ -58,7 +58,7 @@ sudo curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644"  sh -
 export INGRESS_DOMAIN=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4).nip.io
 ```
 
-**VALIDATE STEP 1**
+**VALIDATE STEP**
 
 Run `kubectl get nodes` and wait until the status of your node is ready. 
 It should look something like this: 
@@ -72,6 +72,8 @@ ip-1xx-3x-4x-1xx.us-west-x.compute.internal   Ready    control-plane,master   10
 
 ```
 git clone https://github.com/grabnerandi/klt-demo-with-argocd
+cd klt-demo-with-argocd
+
 ```
 
 ## 3. (Optional) Install Dynatrace OneAgent
@@ -98,19 +100,35 @@ kubectl apply -f dynakube_10_tmp.yaml
 rm dynakube_10_tmp.yaml
 ```
 
+**VALIDATE STEP**
+You should see the Kubernetes Cluster show up in your Dynatrace Kubernetes Dashboards.
+You can also run `kubectl get dynakube -n dynatrace` and should see this after a while:
+```
+$ kubectl get dynakube -n dynatrace
+NAMESPACE   NAME    APIURL                                    TOKENS   STATUS    AGE
+dynatrace   keptn   https://abc12345.live.dynatrace.com/api   keptn    Running   3m29s
+```
+
+**TIP:** I also suggest to turn on Kubernetes Events and Prometheus monitoring in your Dynatrace Settings
+
 ## 4. Install Keptn Lifecycle Toolkit (KLT)
 
 First we install the Cert Manager
 ```
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.yaml
 kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
+
 ```
 
 Then the Keptn Lifecycle Toolkit itself
 ```
 kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/v0.4.1/manifest.yaml
 kubectl wait --for=condition=Available deployment/klc-controller-manager -n keptn-lifecycle-toolkit-system --timeout=120s
+
 ```
+
+**VALIDATE STEP**
+Both `kubectl wait` should come back successfully!
 
 ## 5. Install Observability for KLT
 
@@ -119,6 +137,7 @@ The KLT example repo has a nice way to install Grafana, Prometheus and Jaeger. I
 ```
 cd setup/observability
 make install
+
 ```
 
 To access Grafana and Jaeger via the Browser we define our ingress
@@ -127,9 +146,12 @@ cd ../..
 sed -e 's~domain.placeholder~'"$INGRESS_DOMAIN"'~' ./setup/ingress/grafana-ingress.yaml.tmp > grafana-ingress_gen.yaml
 kubectl apply -f grafana-ingress_gen.yaml
 rm grafana-ingress_gen.yaml
+echo "Access me via http://grafana.$INGRESS_DOMAIN and http://jaeger.$INGRESS_DOMAIN
+
 ```
 
-To validate open your browser and go to: http://grafana.$INGRESS_DOMAIN and http://jaeger-query.$INGRESS_DOMAIN
+**VALIDATE STEP**
+Open the links as shown in the output. For Grafana login with `admin/admin`. Then change the password upon first login! When you browse the Default dashboards you should also see the default Keptn dashboards!
 
 ## 6. Install ArgoCD for KLT
 
@@ -138,6 +160,7 @@ The KLT example repo also has a nice way to install ArgoCD. I copied the files a
 ```
 cd setup/argo
 make install
+
 ```
 
 To access ArgoCD via our browser we want to define our ingress
@@ -146,9 +169,16 @@ cd ../..
 sed -e 's~domain.placeholder~'"$INGRESS_DOMAIN"'~' ./setup/ingress/argocd-ingress.yaml.tmp > argocd-ingress_gen.yaml
 kubectl apply -f argocd-ingress_gen.yaml
 rm argocd-ingress_gen.yaml
+
+ARGOPWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+echo "Access me via http://argocd.$INGRESS_DOMAIN"
+echo "Login with $ARGOPWD"
+
 ```
 
-To validate open your browser and go to: http://argocd.$INGRESS_DOMAIN
+**VALIDATE STEP**
+Open the link shown above. It should bring you to ArgoCD where you can login with the password provided in the output!
+
 
 ## 7. (Optional) Setup Slack Notification
 
