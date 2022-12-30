@@ -228,7 +228,7 @@ You should now see the new App in ArgoCD and ArgoCD doing its work. If everythin
 Above steps can be mostly automated but you need to do this:
 **Do Step 2: Clone the Repo**
 ```
-git clone https://github.com/grabnerandi/klt-on-k3s-with-argocd
+git clone https://github.com/keptn-sandbox/klt-on-k3s-with-argocd
 cd klt-on-k3s-with-argocd
 ```
 
