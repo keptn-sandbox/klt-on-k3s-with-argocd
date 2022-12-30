@@ -146,7 +146,7 @@ function print_info {
     echo "                         INSTALLATION DONE"
     echo "===================================================================="
     echo "ArgoCD: http://argocd.$INGRESS_DOMAIN using admin/$ARGOPWD"
-    echo "Grafana: http://grafana.$INGRESS_DOMAIN using admin/admin"
+    echo "Grafana: http://grafana.$INGRESS_DOMAIN using admin/admin (change after first login)"
     echo "Jaeger: http://jaeger.$INGRESS_DOMAIN"
     echo "===================================================================="
 }
