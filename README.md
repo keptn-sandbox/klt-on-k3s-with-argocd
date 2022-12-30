@@ -1,4 +1,4 @@
-# Keptn Lifecycle Toolkit Demo with ArgoCD
+# Keptn Lifecycle Toolkit Demo on k3s, with ArgoCD, Prometheus, Grafana and Slack
 
 This is a demo repository for [Keptn Lifecycle Toolkit (KLT)](https://lifecycle.keptn.sh/)
 
