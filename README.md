@@ -79,8 +79,8 @@ ip-1xx-3x-4x-1xx.us-west-x.compute.internal   Ready    control-plane,master   10
 ## 2. Clone this git repo
 
 ```
-git clone https://github.com/grabnerandi/klt-demo-with-argocd
-cd klt-demo-with-argocd
+git clone https://github.com/keptn-sandbox/klt-on-k3s-with-argocd
+cd klt-on-k3s-with-argocd
 
 ```
 
@@ -103,7 +103,7 @@ kubectl apply -f https://github.com/Dynatrace/dynatrace-operator/releases/downlo
 kubectl -n dynatrace wait pod --for=condition=ready --selector=app.kubernetes.io/name=dynatrace-operator,app.kubernetes.io/component=webhook --timeout=300s
 
 kubectl -n dynatrace create secret generic keptn --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN"
-sed -e 's~DT_TENANT~'"$DT_TENANT"'~' ./klt-demo-with-argocd/setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
+sed -e 's~DT_TENANT~'"$DT_TENANT"'~' ./klt-on-k3s-with-argocd/setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
 kubectl apply -f dynakube_10_tmp.yaml
 rm dynakube_10_tmp.yaml
 ```
@@ -228,8 +228,8 @@ You should now see the new App in ArgoCD and ArgoCD doing its work. If everythin
 Above steps can be mostly automated but you need to do this:
 **Do Step 2: Clone the Repo**
 ```
-git clone https://github.com/grabnerandi/klt-demo-with-argocd
-cd klt-demo-with-argocd
+git clone https://github.com/grabnerandi/klt-on-k3s-with-argocd
+cd klt-on-k3s-with-argocd
 ```
 
 **Do Step 8: Forke the Demo Repo**
