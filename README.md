@@ -1,12 +1,15 @@
 # Keptn Lifecycle Toolkit Demo on k3s, with ArgoCD, Prometheus, Grafana and Slack
 
-This is a demo repository for [Keptn Lifecycle Toolkit (KLT)](https://lifecycle.keptn.sh/)
+This is a demo tutorial repository for [Keptn Lifecycle Toolkit (KLT)](https://lifecycle.keptn.sh/)
 
 The purpose is experiment with KLT on some simple demo apps and show different Use Cases such as
 * Sending Slack Notifications for every deployment
 * Post Deployment Validations against Prometheus and Dynatrace SLOs
 * Pre Deployment Dependency Checks
 * ...
+
+Watch a 9 minute video on YouTube!
+[![Keptn Lifecycle Toolkit Demo in Action](https://img.youtube.com/vi/6J_RzpmXoCc/0.jpg)](https://www.youtube.com/watch?v=6J_RzpmXoCc)
 
 # Demo Setup Explained
 
