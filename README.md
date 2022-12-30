@@ -16,6 +16,13 @@ If you follow the demo instructions you will get
 3. Observability (Grafana, Prometheus, Jaeger) based on [Observability for KLT](https://github.com/keptn-sandbox/lifecycle-toolkit-examples/tree/main/support/observability) 
 4. ArgoCD based on [ArgoCD for KLT](https://github.com/keptn-sandbox/lifecycle-toolkit-examples/tree/main/support/argo)
 5. Exposed Grafana, Jaeger and ArgoCD through Ingress, e.g: grafana.1.2.3.4.nip.io
+6. A Sample app deployed with Argo
+7. Slack Notifications every time the app is deployed!
+
+Here is a screenshot of my demo installation - takes about 5 minutes to get here!
+![](./images/finaldemooverview.png)
+
+Now lets get to the installation!
 
 # Manual Demo Installation: Step-by-Step
 
