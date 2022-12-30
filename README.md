@@ -18,6 +18,7 @@ If you follow the demo instructions you will get
 5. Exposed Grafana, Jaeger and ArgoCD through Ingress, e.g: grafana.1.2.3.4.nip.io
 6. A Sample app deployed with Argo
 7. Slack Notifications every time the app is deployed!
+8. (optionally) install Dynatrace OneAgent
 
 Here is a screenshot of my demo installation - takes about 5 minutes to get here!
 ![](./images/finaldemooverview.png)
