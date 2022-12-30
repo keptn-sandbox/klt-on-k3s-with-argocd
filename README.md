@@ -27,7 +27,7 @@ Now lets get to the installation!
 # Manual Demo Installation: Step-by-Step
 
 The following are the 9 individual steps so you see how to setup everything up.
-If you want some help - go to the next section which uses the install-klt-on-k3s.sh.
+If you want some help - go to [Automated Demo Installation](#automated-demo-installation) which uses the *install-klt-on-k3s.sh*
 
 ## 1. k8s cluster
 
