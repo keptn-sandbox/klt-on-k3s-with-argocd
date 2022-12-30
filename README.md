@@ -260,6 +260,17 @@ The script will install tools, k3s, observability, argocd and - depending on you
 install-klt-on-k3s.sh
 ```
 
+It will finish with an output like this
+```
+====================================================================
+                         INSTALLATION DONE
+====================================================================
+ArgoCD: http://argocd.11.22.33.44.nip.io using admin/ABCDEFGHIK
+Grafana: http://grafana.11.22.33.44.nip.io using admin/admin (change after first login)
+Jaeger: http://jaeger.11.22.33.44.nip.io
+====================================================================
+```
+
 
 # How to uninstall?
 
