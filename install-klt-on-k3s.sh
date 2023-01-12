@@ -7,7 +7,7 @@ INSTALL_TOOLS=${INSTALL_TOOLS:-true}
 INSTALL_K3S=${INSTALL_K3S:-true}
 
 # version defaults
-KLT_VERSION=${KLT_VERSION:-0.5.0}
+KLT_VERSION=${KLT_VERSION:-v0.5.0}
 K3S_VERSION=${K3S_VERSION:-v1.25}
 
 # Got your own INGRESS_DOMAIN? If so then INGRESS_DOMAIN=yourdomain. Otherwise it defaults to your public IP
