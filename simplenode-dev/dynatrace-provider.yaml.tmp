@@ -1,0 +1,9 @@
+apiVersion: lifecycle.keptn.sh/v1alpha2
+kind: KeptnEvaluationProvider
+metadata:
+  name: dynatrace
+spec:
+  targetServer: "DT_TENANT"
+  secretKeyRef:
+    name: dynatrace
+    key: DT_TOKEN

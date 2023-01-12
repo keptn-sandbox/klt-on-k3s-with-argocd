@@ -63,15 +63,6 @@ install:
 	@echo "Observability Demo installed"
 	@echo "#######################################################"
 
-.PHONY: import-grafana-dashboard
-import-grafana-dashboard:
-	@echo ""
-	@echo "Importing Grafana Dashboard and Datasources"
-	@echo ""
-	curl -X POST --insecure http://admin:admin@localhost:$(GRAFANA_PORT_FORWARD)/api/dashboards/import -H "Content-Type: application/json" -d @./assets/grafana_dashboard_overview.json
-	curl -X POST --insecure http://admin:admin@localhost:$(GRAFANA_PORT_FORWARD)/api/dashboards/import -H "Content-Type: application/json" -d @./assets/grafana_dashboard_workloads.json
-	curl -X POST --insecure http://admin:admin@localhost:$(GRAFANA_PORT_FORWARD)/api/dashboards/import -H "Content-Type: application/json" -d @./assets/grafana_dashboard_applications.json
-
 .PHONY: uninstall
 uninstall:
 	kubectl delete -f config/jaeger.yaml -n "$(LFC_NAMESPACE)" --ignore-not-found=true
