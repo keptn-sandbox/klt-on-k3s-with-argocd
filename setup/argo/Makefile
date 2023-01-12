@@ -1,6 +1,6 @@
 ARGO_NAMESPACE ?= argocd
 # renovate: datasource=github-tags depName=argoproj/argo-cd
-ARGO_VERSION ?= v2.5.2
+ARGO_VERSION ?= v2.6.0-rc2
 # renovate: datasource=github-tags depName=cert-manager/cert-manager
 ARGO_SECRET = $(shell kubectl -n ${ARGO_NAMESPACE} get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
 
@@ -11,7 +11,7 @@ install:
 	@echo "-----------------------------------"
 	kubectl create namespace $(ARGO_NAMESPACE) | true
 	kubectl apply -n $(ARGO_NAMESPACE) -f https://raw.githubusercontent.com/argoproj/argo-cd/$(ARGO_VERSION)/manifests/install.yaml
-	kubectl apply -n $(ARGO_NAMESPACE) -f ./config/argocd-cm.yaml
+#	kubectl apply -n $(ARGO_NAMESPACE) -f ./config/argocd-cm.yaml
 	kubectl apply -n $(ARGO_NAMESPACE) -f ./config/argocd-cmd-params-cm.yaml
 
 	@echo ""
