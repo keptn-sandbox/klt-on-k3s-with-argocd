@@ -1,5 +1,7 @@
 # Keptn Lifecycle Toolkit Demo on k3s, with ArgoCD, Prometheus, Grafana and Slack
 
+**The current version of this tutorial installs Keptn Lifecycle Toolkit v0.5.0**
+
 This is a demo tutorial repository for [Keptn Lifecycle Toolkit (KLT)](https://lifecycle.keptn.sh/)
 
 The purpose is experiment with KLT on some simple demo apps and show different Use Cases such as
