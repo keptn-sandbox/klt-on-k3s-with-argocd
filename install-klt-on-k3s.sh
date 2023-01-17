@@ -6,6 +6,10 @@ set -eu
 INSTALL_TOOLS=${INSTALL_TOOLS:-true}
 INSTALL_K3S=${INSTALL_K3S:-true}
 
+# version defaults
+KLT_VERSION=${KLT_VERSION:-v0.5.0}
+K3S_VERSION=${K3S_VERSION:-v1.25}
+
 # Got your own INGRESS_DOMAIN? If so then INGRESS_DOMAIN=yourdomain. Otherwise it defaults to your public IP
 INGRESS_DOMAIN=${INGRESS_DOMAIN:-none}
 
@@ -36,7 +40,7 @@ function install_tools {
 function install_k3s {
     if [[ "${INSTALL_K3S}" == "true" ]]; then
         echo "STEP: Installing k3s"
-        sudo curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644"  sh -
+        sudo curl -sfL https://get.k3s.io | INSTALL_K3S_CHANNEL="${K3S_VERSION}" K3S_KUBECONFIG_MODE="644"  sh -
 
         # now lets make sure k3s is fully started
         k3s_started=false
@@ -82,10 +86,11 @@ function install_oneagent {
 
 function install_klt {
     echo "STEP: Installing Keptn Lifecycle Toolkit"
+    # TODO: planned with 0.6.0 -> no need for cert-manager
     kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.yaml
     kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
 
-    kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/v0.4.1/manifest.yaml
+    kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml
     kubectl wait --for=condition=Available deployment/klc-controller-manager -n keptn-lifecycle-toolkit-system --timeout=120s
 }
 
