@@ -91,7 +91,7 @@ data:
                 "uid": "P1809F7CD0C75ACF3"
               },
               "editorMode": "builder",
-              "expr": "keptn_app_count{keptn_deployment_app_status=\"Succeeded\", keptn_deployment_app_name=\"$Application\"}",
+              "expr": "keptn_app_count_total{keptn_deployment_app_status=\"Succeeded\", keptn_deployment_app_name=\"$Application\"}",
               "format": "table",
               "legendFormat": "__auto",
               "range": true,
@@ -244,7 +244,7 @@ data:
                 "uid": "P1809F7CD0C75ACF3"
               },
               "editorMode": "builder",
-              "expr": "keptn_app_count{keptn_deployment_app_status=\"Failed\", keptn_deployment_app_name=\"$Application\"}",
+              "expr": "keptn_app_count_total{keptn_deployment_app_status=\"Failed\", keptn_deployment_app_name=\"$Application\"}",
               "format": "table",
               "legendFormat": "__auto",
               "range": true,
@@ -401,8 +401,8 @@ data:
                 "type": "prometheus",
                 "uid": "P1809F7CD0C75ACF3"
               },
-              "editorMode": "builder",
-              "expr": "avg by(keptn_deployment_workload_previousversion) (keptn_app_deploymentinterval{keptn_deployment_app_name=\"$Application\"})",
+              "editorMode": "code",
+              "expr": "avg(avg_over_time(keptn_app_deploymentduration{keptn_deployment_app_name=\"$Application\"}[$__interval])) by (keptn_deployment_app_version, keptn_deployment_app_previousversion)",
               "format": "table",
               "legendFormat": "__auto",
               "range": true,
@@ -467,8 +467,8 @@ data:
                 "type": "prometheus",
                 "uid": "P1809F7CD0C75ACF3"
               },
-              "editorMode": "builder",
-              "expr": "max by(keptn_deployment_app_version) (keptn_app_deploymentduration{keptn_deployment_app_name=\"$Application\"})",
+              "editorMode": "code",
+              "expr": "avg(avg(avg_over_time(keptn_app_deploymentduration{keptn_deployment_app_name=\"$Application\"}[$__interval])) by (keptn_deployment_app_version, keptn_deployment_app_previousversion))",
               "interval": "",
               "legendFormat": "{{keptn_workload_version}}",
               "range": true,
