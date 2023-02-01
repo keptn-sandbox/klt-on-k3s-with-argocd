@@ -24,6 +24,7 @@ If you follow the demo instructions you will get
 6. A Sample app deployed with Argo
 7. Slack Notifications every time the app is deployed!
 8. (optionally) install Dynatrace OneAgent
+9. (optionally) import Dynatrace DORA Dashboard
 
 Here is a screenshot of my demo installation - takes about 5 minutes to get here!
 ![](./images/finaldemooverview.png)
@@ -276,6 +277,12 @@ Grafana: http://grafana.11.22.33.44.nip.io using admin/admin (change after first
 Jaeger: http://jaeger.11.22.33.44.nip.io
 ====================================================================
 ```
+
+# Dynatrace DORA Dashboard
+
+For Dynatrace users you can import the following DORA template dashboard which shows the most important deployment metrics that KLT exposes:
+Once imported it will look like this:
+![](./images/dynatrace_dora_dashboard.png)
 
 
 # How to uninstall?
