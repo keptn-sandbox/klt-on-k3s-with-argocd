@@ -280,7 +280,7 @@ Jaeger: http://jaeger.11.22.33.44.nip.io
 
 # Dynatrace DORA Dashboard
 
-For Dynatrace users you can import the following DORA template dashboard which shows the most important deployment metrics that KLT exposes:
+For Dynatrace users you can import the following [DORA template dashboard](./setup/dynatrace/dora_dashboard_dynatrace.json) which shows the most important deployment metrics that KLT exposes:
 Once imported it will look like this:
 ![](./images/dynatrace_dora_dashboard.png)
 
