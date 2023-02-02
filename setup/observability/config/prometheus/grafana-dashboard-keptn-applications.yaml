@@ -332,7 +332,7 @@ data:
                 "uid": "P1809F7CD0C75ACF3"
               },
               "editorMode": "builder",
-              "expr": "avg by(keptn_deployment_app_previousversion, keptn_deployment_app_version) (keptn_app_deploymentinterval{keptn_deployment_app_name=\"$Application\"})",
+              "expr": "avg(avg_over_time(keptn_app_deploymentduration{keptn_deployment_app_name=\"$Application\"}[$__interval]))",
               "format": "time_series",
               "legendFormat": "{{keptn_deployment_app_previousversion}} - {{keptn_deployment_app_version}}",
               "range": true,
