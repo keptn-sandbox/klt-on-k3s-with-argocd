@@ -10,6 +10,9 @@ INSTALL_K3S=${INSTALL_K3S:-true}
 KLT_VERSION=${KLT_VERSION:-v0.5.0}
 K3S_VERSION=${K3S_VERSION:-v1.25}
 
+# namespace for KLT
+TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-keptn-lifecycle-toolkit-system}
+
 # Got your own INGRESS_DOMAIN? If so then INGRESS_DOMAIN=yourdomain. Otherwise it defaults to your public IP
 INGRESS_DOMAIN=${INGRESS_DOMAIN:-none}
 
@@ -91,7 +94,7 @@ function install_klt {
     kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
 
     kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml
-    kubectl wait --for=condition=Available deployment/klc-controller-manager -n keptn-lifecycle-toolkit-system --timeout=120s
+    kubectl wait --for=condition=Available deployment/klc-controller-manager -n ${TOOLKIT_NAMESPACE} --timeout=120s
 }
 
 function install_observabilty {
@@ -104,6 +107,17 @@ function install_observabilty {
     kubectl apply -f grafana-ingress_gen.yaml
     rm grafana-ingress_gen.yaml
     echo "Access me via http://grafana.$INGRESS_DOMAIN and http://jaeger.$INGRESS_DOMAIN"
+
+    # If Dynatrace is installed we configure the OTel-Collector to send traces & metrics to Dynatrace
+    if [[ "$DT_TENANT" != "none" ]] && [[ "$DT_OPERATOR_TOKEN" != "none" ]]; then 
+        echo "STEP: Configuring OpenTelemetry Collector with Dynatrace"
+
+        sed -e 's~DT_URL_TO_REPLACE~'"$DT_TENANT"'~'  -e 's~DT_TOKEN_TO_REPLACE~'"$DT_INGEST_TOKEN"'~' ./observability/config/otel-collector-with-dt.yaml > otel-collector-with-dt_tmp.yaml
+        kubectl apply -f otel-collector-with-dt_tmp.yaml -n "$(TOOLKIT_NAMESPACE)"
+        rm otel-collector-with-dt_tmp.yaml
+
+    	kubectl wait --for=condition=available deployment/otel-collector -n "$(TOOLKIT_NAMESPACE)" --timeout=120s
+    fi
 }
 
 function install_argocd {
