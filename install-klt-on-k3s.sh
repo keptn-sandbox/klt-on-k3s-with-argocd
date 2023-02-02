@@ -117,7 +117,7 @@ function install_observabilty {
         rm otel-collector-with-dt_tmp.yaml
 
         # restart collector to read the new configmap
-        kubectl rollout restart deployment -n "$(TOOLKIT_NAMESPACE)" otel-collector
+        kubectl rollout restart deployment -n "${TOOLKIT_NAMESPACE}" otel-collector
     	kubectl wait --for=condition=available deployment/otel-collector -n "${TOOLKIT_NAMESPACE}" --timeout=120s
     fi
 }
