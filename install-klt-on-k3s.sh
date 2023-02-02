@@ -113,10 +113,10 @@ function install_observabilty {
         echo "STEP: Configuring OpenTelemetry Collector with Dynatrace"
 
         sed -e 's~DT_URL_TO_REPLACE~'"$DT_TENANT"'~'  -e 's~DT_TOKEN_TO_REPLACE~'"$DT_INGEST_TOKEN"'~' ./setup/observability/config/otel-collector-with-dt.yaml > otel-collector-with-dt_tmp.yaml
-        kubectl apply -f otel-collector-with-dt_tmp.yaml -n "$(TOOLKIT_NAMESPACE)"
+        kubectl apply -f otel-collector-with-dt_tmp.yaml -n "${TOOLKIT_NAMESPACE}"
         rm otel-collector-with-dt_tmp.yaml
 
-    	kubectl wait --for=condition=available deployment/otel-collector -n "$(TOOLKIT_NAMESPACE)" --timeout=120s
+    	kubectl wait --for=condition=available deployment/otel-collector -n "${TOOLKIT_NAMESPACE}" --timeout=120s
     fi
 }
 
