@@ -42,7 +42,7 @@ data:
         endpoint: 0.0.0.0:8889
       logging:
       otlphttp:
-        endpoint: DT_URL_TO_REPLACE/api/v2/otlp
+        endpoint: https://DT_URL_TO_REPLACE/api/v2/otlp
         headers:
           Authorization: "Api-Token DT_TOKEN_TO_REPLACE"      
 
