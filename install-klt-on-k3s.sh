@@ -20,6 +20,7 @@ INGRESS_DOMAIN=${INGRESS_DOMAIN:-none}
 DT_TENANT=${DT_TENANT:-none}
 DT_OPERATOR_TOKEN=${DT_OPERATOR_TOKEN:-none}
 DT_INGEST_TOKEN=${DT_INGEST_TOKEN:-none}
+DT_OTEL_INGEST_TOKEN=${DT_OTEL_INGEST_TOKEN:-none}
 
 # Shall we setup the Slack Webhook integration? if so - set SLACK_HOOK=YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC
 SLACK_HOOK=${SLACK_HOOK:-none}
@@ -109,10 +110,10 @@ function install_observabilty {
     echo "Access me via http://grafana.$INGRESS_DOMAIN and http://jaeger.$INGRESS_DOMAIN"
 
     # If Dynatrace is installed we configure the OTel-Collector to send traces & metrics to Dynatrace
-    if [[ "$DT_TENANT" != "none" ]] && [[ "$DT_INGEST_TOKEN" != "none" ]]; then 
+    if [[ "$DT_TENANT" != "none" ]] && [[ "$DT_OTEL_INGEST_TOKEN" != "none" ]]; then 
         echo "STEP: Configuring OpenTelemetry Collector with Dynatrace"
 
-        sed -e 's~DT_URL_TO_REPLACE~'"$DT_TENANT"'~'  -e 's~DT_TOKEN_TO_REPLACE~'"$DT_INGEST_TOKEN"'~' ./setup/observability/config/otel-collector-with-dt.yaml > otel-collector-with-dt_tmp.yaml
+        sed -e 's~DT_URL_TO_REPLACE~'"$DT_TENANT"'~'  -e 's~DT_TOKEN_TO_REPLACE~'"$DT_OTEL_INGEST_TOKEN"'~' ./setup/observability/config/otel-collector-with-dt.yaml > otel-collector-with-dt_tmp.yaml
         kubectl apply -f otel-collector-with-dt_tmp.yaml -n "${TOOLKIT_NAMESPACE}"
         rm otel-collector-with-dt_tmp.yaml
 

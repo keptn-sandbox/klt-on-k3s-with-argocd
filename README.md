@@ -24,7 +24,8 @@ If you follow the demo instructions you will get
 6. A Sample app deployed with Argo
 7. Slack Notifications every time the app is deployed!
 8. (optionally) install Dynatrace OneAgent
-9. (optionally) import Dynatrace DORA Dashboard
+9. (optionally) send OTel traces & metrics to Dynatrace
+10. (optionally) import Dynatrace DORA Dashboard
 
 Here is a screenshot of my demo installation - takes about 5 minutes to get here!
 ![](./images/finaldemooverview.png)
@@ -102,8 +103,8 @@ Either
 
 ```
 export DT_TENANT=abc12345.live.dynatrace.com
-export DT_OPERATOR_TOKEN=dt0c01.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXY
-export DT_INGEST_TOKEN=dt0c01.YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+export DT_OPERATOR_TOKEN=dt0c01.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+export DT_INGEST_TOKEN=dt0c01.YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
 
 kubectl create namespace dynatrace
 kubectl apply -f https://github.com/Dynatrace/dynatrace-operator/releases/download/v0.10.1/kubernetes.yaml
@@ -167,6 +168,25 @@ echo "Access me via http://grafana.$INGRESS_DOMAIN and http://jaeger.$INGRESS_DO
 
 **VALIDATE STEP**
 Open the links as shown in the output. For Grafana login with `admin/admin`. Then change the password upon first login! When you browse the Default dashboards you should also see the default Keptn dashboards!
+
+## 5a (optional) Send OpenTelemetry Traces to Dynatrace
+
+If you want OpenTelemetry Traces and Metrics to be sent to Dynatrace you can configure the OTel Collector to send the data to your Dynatrace Tenant using an API Token that has the capabilities to ingest traces and metrics.
+
+```
+export DT_OTEL_INGEST_TOKEN=dt0c01.ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+
+sed -e 's~DT_URL_TO_REPLACE~'"$DT_TENANT"'~'  -e 's~DT_TOKEN_TO_REPLACE~'"$DT_OTEL_INGEST_TOKEN"'~' ./setup/observability/config/otel-collector-with-dt.yaml > otel-collector-with-dt_tmp.yaml
+kubectl apply -f otel-collector-with-dt_tmp.yaml -n keptn-lifecycle-toolkit-system
+rm otel-collector-with-dt_tmp.yaml
+
+```
+
+Now ltes restart collector to read the new configmap
+```
+kubectl rollout restart deployment -n keptn-lifecycle-toolkit-system otel-collector
+kubectl wait --for=condition=available deployment/otel-collector -n keptn-lifecycle-toolkit-system --timeout=120s
+```
 
 ## 6. Install ArgoCD for KLT
 
@@ -252,6 +272,7 @@ export GITHUBREPO=yourgithubaccount/your-klt-demo-repo
 export DT_TENANT=abc12345.live.dynatrace.com
 export DT_OPERATOR_TOKEN=dt0c01.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXY
 export DT_INGEST_TOKEN=dt0c01.YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
+export DT_OTEL_INGEST_TOKEN=dtdt0c01.ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
 ```
 
 **Optionally Do this from Step 7: Export your Slack WebHook**
@@ -278,7 +299,11 @@ Jaeger: http://jaeger.11.22.33.44.nip.io
 ====================================================================
 ```
 
-# Dynatrace DORA Dashboard
+# Observability with Dynatrace
+
+To leverage the full observability capabilities with Dynatrace the installation script can also configure the OpenTelemetry Collector to send OTel Traces and Metrics to Dynatrace. For that you need to set the env variable DT_OTEL_INGEST_TOKEN to a token that has OpenTelemetry traces and metrics ingest capabilities.
+
+To visualize the metrics we also have a dashboard prepared.
 
 For Dynatrace users you can import the following [DORA template dashboard](./setup/dynatrace/dora_dashboard_dynatrace.json) which shows the most important deployment metrics that KLT exposes:
 Once imported it will look like this:
