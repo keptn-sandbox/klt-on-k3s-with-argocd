@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: simplenode-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/malon875875/klt-on-k3s-with-argocd
+    targetRevision: feature/marcos
+    path: simplenode-dev
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: simplenode-dev
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
