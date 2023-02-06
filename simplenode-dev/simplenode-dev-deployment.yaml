@@ -18,13 +18,12 @@ spec:
         app: simplenode
         app.kubernetes.io/name: simplenodeservice
       annotations:
-        # keptn.sh/app: simple-app
         keptn.sh/workload: simplenode
         keptn.sh/version: 1.0.2
         keptn.sh/pre-deployment-evaluations: evaluate-dependencies
-        keptn.sh/pre-deployment-tasks: notify
+        # keptn.sh/pre-deployment-tasks: notify
         keptn.sh/post-deployment-evaluations: evaluate-deployment
-        keptn.sh/post-deployment-tasks: notify
+        # keptn.sh/post-deployment-tasks: notify
     spec:
       containers:
       - name: simplenode
