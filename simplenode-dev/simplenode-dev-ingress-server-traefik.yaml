@@ -12,6 +12,6 @@ spec:
       priority: 10
       services:
         - name: simplenode
-          port: 80
+          port: 8181
   tls:
     certResolver: default
