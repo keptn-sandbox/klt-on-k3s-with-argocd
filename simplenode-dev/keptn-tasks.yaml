@@ -12,7 +12,8 @@ spec:
             # fix BadCertificate
             # brew install deno
             # https://deno.com/blog/v1.13
-            Deno.env.set("DENO_TLS_CA_STORE","system");
+            let test = Deno.env.get("DENO_TLS_CA_STORE");
+            console.log(test) 
             
             let text = Deno.env.get("SECURE_DATA");
             let context = Deno.env.get("CONTEXT");
