@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: simplenode
+  namespace: simplenode-dev
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`simplenode-dev.rancher.localhost`)
+      priority: 10
+      services:
+        - name: simplenode
+          port: 80
+  tls:
+    certResolver: default
