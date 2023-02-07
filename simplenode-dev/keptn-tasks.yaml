@@ -9,6 +9,9 @@ spec:
     inline:
       code: |
             
+            let test = Deno.env.get("DENO_TLS_CA_STORE");
+            console.log(test);
+            
             let text = Deno.env.get("SECURE_DATA");
             let context = Deno.env.get("CONTEXT");
             let data;
