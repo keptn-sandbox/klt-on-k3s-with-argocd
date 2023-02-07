@@ -7,10 +7,48 @@ metadata:
 spec:
   function:
     inline:
-      code: | 
-            let body = `{"text": "Hello, world. this is a test"}`;
+      code: |
+            Deno.env.set("DENO_TLS_CA_STORE", "system");
+            
+            let text = Deno.env.get("SECURE_DATA");
+            let context = Deno.env.get("CONTEXT");
+            let data;
+            let body;
+            let contextdata;
+            if (text != undefined) {
+                data = JSON.parse(text);
+            }
+            if (context != undefined) {
+                contextdata = JSON.parse(context);
+            }
+            if (contextdata.objectType == "Application") {
+                body = `{
+                        "text": "Application ${contextdata.appName}, Version ${contextdata.appVersion} has been deployed"
+                      }`
+            }
+            if (contextdata.objectType == "Workload") {
+                body = `{
+                          "username" : "keptn",
+                          "blocks": [
+                            {
+                              "type": "section",
+                              "text": {
+                                "type": "mrkdwn",
+                                "text": "Workload *${contextdata.workloadName}* notification!!"
+                              }
+                            },
+                            {
+                              "type": "section",
+                              "text": {
+                                "type": "mrkdwn",
+                                "text": "*Version:* ${contextdata.workloadVersion}\n*App:* ${contextdata.appName}"
+                              }
+                            }
+                          ]
+                        }`
+            }
             console.log(body)
-            let resp = await fetch("https://hooks.slack.com/services/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", {
+            let resp = await fetch("https://hooks.slack.com/services/" + data.slack_hook, {
                 method: "POST",
                 body,
                 headers: {
