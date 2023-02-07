@@ -49,6 +49,10 @@ spec:
             let resp = await fetch("https://hooks.slack.com/services/" + data.slack_hook, {
                 method: "POST",
                 body,
+                headers: {
+                   "Content-Type": "application/json",
+                   Accept: "application/json",
+                },
             });
             console.log(resp)    
     secureParameters:
