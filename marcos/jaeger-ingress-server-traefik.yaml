@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jaeger-query
+  namespace: keptn-lifecycle-toolkit-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`jaeger.rancher.localhost`)
+      priority: 10
+      services:
+        - name: jaeger-query
+          port: 16686
+  tls:
+    certResolver: default

@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`grafana.rancher.localhost`)
+      priority: 10
+      services:
+        - name: grafana
+          port: 3000
+  tls:
+    certResolver: default
