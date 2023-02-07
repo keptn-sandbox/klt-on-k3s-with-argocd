@@ -9,9 +9,9 @@ spec:
   routes:
     - kind: Rule
       match: Host(`simplenode-dev.rancher.localhost`)
-      priority: 10
+      priority: 9
       services:
         - name: simplenode
-          port: 8181
+          port: 80
   tls:
     certResolver: default
