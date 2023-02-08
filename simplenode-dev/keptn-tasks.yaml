@@ -38,7 +38,7 @@ spec:
                               "type": "section",
                               "text": {
                                 "type": "mrkdwn",
-                                "text": "Workload *${contextdata.workloadName}* notification!!"
+                                "text": "Workload *${contextdata.workloadName}* notification from KLC!!"
                               }
                             },
                             {
