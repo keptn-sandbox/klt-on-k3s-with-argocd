@@ -9,10 +9,12 @@ spec:
     inline:
       code: |
             
-            // Trying to fix Bad Certificate
-            // https://medium.com/deno-the-complete-reference/3-ways-of-accepting-self-signed-certificates-in-deno-9c9286ab957
-            // let test = Deno.env.get("DENO_TLS_CA_STORE");
-            // console.log(test);
+            // instead of this code, use rather https://raw.githubusercontent.com/keptn/lifecycle-controller/main/functions-runtime/samples/ts/slack.ts
+            
+            // BadCertificate error comes from using Zscaler, the hook works fine when disabling it
+            // adding Zscaler's certificate to DENO_TLS_CA_STORE and DENO_CERT to the env variables allowed could solve the issue
+            // or
+            // adding deno run --allow-net --cert ./ca.pem --allow-env=DATA,SECURE_DATA,CONTEXT "$SCRIPT" to https://github.com/keptn/lifecycle-toolkit/blob/main/functions-runtime/entrypoint.sh
             
             let text = Deno.env.get("SECURE_DATA");
             let context = Deno.env.get("CONTEXT");
