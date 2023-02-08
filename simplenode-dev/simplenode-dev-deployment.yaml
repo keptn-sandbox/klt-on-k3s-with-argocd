@@ -24,7 +24,7 @@ spec:
         keptn.sh/pre-deployment-evaluations: evaluate-dependencies
         keptn.sh/pre-deployment-tasks: notify
         keptn.sh/post-deployment-evaluations: evaluate-deployment
-        #keptn.sh/post-deployment-tasks: notify
+        keptn.sh/post-deployment-tasks: notify
     spec:
       containers:
       - name: simplenode
