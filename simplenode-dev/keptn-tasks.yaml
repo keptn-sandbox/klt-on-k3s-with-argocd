@@ -9,10 +9,10 @@ spec:
     inline:
       code: |
             
-            # Trying to fix Bad Certificate
-            # https://medium.com/deno-the-complete-reference/3-ways-of-accepting-self-signed-certificates-in-deno-9c9286ab957
-            # let test = Deno.env.get("DENO_TLS_CA_STORE");
-            # console.log(test);
+            // Trying to fix Bad Certificate
+            // https://medium.com/deno-the-complete-reference/3-ways-of-accepting-self-signed-certificates-in-deno-9c9286ab957
+            // let test = Deno.env.get("DENO_TLS_CA_STORE");
+            // console.log(test);
             
             let text = Deno.env.get("SECURE_DATA");
             let context = Deno.env.get("CONTEXT");
