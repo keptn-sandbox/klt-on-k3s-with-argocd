@@ -101,7 +101,7 @@ function install_klt {
 
     # kubectl create ns ${TOOLKIT_NAMESPACE} | true
     kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml -n ${TOOLKIT_NAMESPACE}
-    kubectl wait --for=condition=Available deployment/klc-controller-manager -n ${TOOLKIT_NAMESPACE} --timeout=120s
+    kubectl wait --for=condition=Available deployment/lifecycle-operator -n ${TOOLKIT_NAMESPACE} --timeout=120s
 
     # MOVED TO HELM INSTALL WITH KLT 0.7.0
     # helm repo add klt https://charts.lifecycle.keptn.sh
