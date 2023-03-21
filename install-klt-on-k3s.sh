@@ -91,6 +91,31 @@ function install_oneagent {
     sed -e 's~DT_TENANT~'"$DT_TENANT"'~' -e 's~K8S_CLUSTERNAME~'"$K8S_CLUSTERNAME"'~' ./setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
     kubectl apply -f dynakube_10_tmp.yaml
     rm dynakube_10_tmp.yaml
+
+    # now update the dynatrace settings for k8s cluster
+    KUBESYSTEM_UUID=$(kubectl get namespace kube-system --output jsonpath={.metadata.uid})
+    CURL_DATA='[
+            {"schemaId":"builtin:cloud.kubernetes",
+             "value": { 
+                "enabled":true, 
+                "label":"keptn",
+                "clusterIdEnabled":true,
+                "cloudApplicationPipelineEnabled":true,
+                "pvcMonitoringEnabled":true,
+                "openMetricsPipelineEnabled":true,
+                "openMetricsBuiltinEnabled":true,
+                "eventProcessingActive":true,
+                "clusterId":"'${KUBESYSTEM_UUID}'",
+                "filterEvents":false}
+            }
+          ]'
+    echo "Changing Configuration Settings for Kubernetes Monitoring: ${KUBESYSTEM_UUID}"
+    curl "https://${DT_TENANT}/api/v2/settings/objects" \
+        -X POST \
+        -H "Accept: application/json; charset=utf-8" \
+        -H "Content-Type: application/json; charset=utf-8" \
+        -H "Authorization: Api-Token ${DT_OPERATOR_TOKEN}" \
+        --data "$CURL_DATA"
 }
 
 function install_klt {
