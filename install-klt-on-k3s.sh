@@ -38,6 +38,9 @@ function install_tools {
         sudo yum install tree -y
         sudo wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
         sudo yum install docker
+
+        # install helm (since KLT 0.7.0 we moved from manifest to helm)
+        sudo curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash 
     fi 
 }
 
@@ -96,9 +99,14 @@ function install_klt {
     # kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.yaml
     # kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
 
-    kubectl create ns ${TOOLKIT_NAMESPACE} | true
-    kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml -n ${TOOLKIT_NAMESPACE}
-    kubectl wait --for=condition=Available deployment/klc-controller-manager -n ${TOOLKIT_NAMESPACE} --timeout=120s
+    # kubectl create ns ${TOOLKIT_NAMESPACE} | true
+    # kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml -n ${TOOLKIT_NAMESPACE}
+    # kubectl wait --for=condition=Available deployment/klc-controller-manager -n ${TOOLKIT_NAMESPACE} --timeout=120s
+
+    # MOVED TO HELM INSTALL WITH KLT 0.7.0
+    helm repo add klt https://charts.lifecycle.keptn.sh
+    helm repo update
+    helm upgrade --install keptn klt/klt --version ${KLT_VERSION} -n ${TOOLKIT_NAMESPACE} --create-namespace --wait
 }
 
 function install_observabilty {
