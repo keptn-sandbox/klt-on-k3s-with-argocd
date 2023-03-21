@@ -77,7 +77,7 @@ function install_oneagent {
         return;
     fi
 
-    K8S_CLUSTERNAME="Keptn_${INGRESS_DOMAIN}"
+    K8S_CLUSTERNAME="keptn_${INGRESS_DOMAIN}"
 
     echo "STEP: Installing Dynatrace OneAgent for $DT_TENANT for name '$K8S_CLUSTERNAME'"
     kubectl create namespace dynatrace | true
