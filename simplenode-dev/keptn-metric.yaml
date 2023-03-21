@@ -1,0 +1,10 @@
+apiVersion: metrics.keptn.sh/v1alpha3
+kind: KeptnMetric
+metadata:
+  name: available-cpus
+  namespace: simplenode-dev
+spec:
+  provider: 
+    name: prometheus
+  query: "sum(kube_node_status_capacity{resource='cpu'})"
+  fetchIntervalSeconds: 10

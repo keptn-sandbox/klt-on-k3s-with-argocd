@@ -18,7 +18,7 @@ spec:
         app: simplenode
         app.kubernetes.io/name: simplenodeservice
       annotations:
-        # keptn.sh/app: simple-app
+        # keptn.sh/app: simpleapp
         keptn.sh/workload: simplenode
         keptn.sh/version: 1.0.2
         keptn.sh/pre-deployment-evaluations: evaluate-dependencies

@@ -7,7 +7,7 @@ INSTALL_TOOLS=${INSTALL_TOOLS:-true}
 INSTALL_K3S=${INSTALL_K3S:-true}
 
 # version defaults
-KLT_VERSION=${KLT_VERSION:-v0.5.0}
+KLT_VERSION=${KLT_VERSION:-v0.7.0}
 K3S_VERSION=${K3S_VERSION:-v1.25}
 
 # namespace for KLT
@@ -77,22 +77,24 @@ function install_oneagent {
         return;
     fi
 
-    echo "STEP: Installing Dynatrace OneAgent for $DT_TENANT"
+    K8S_CLUSTERNAME="Keptn_${INGRESS_DOMAIN}"
+
+    echo "STEP: Installing Dynatrace OneAgent for $DT_TENANT for name '$K8S_CLUSTERNAME'"
     kubectl create namespace dynatrace | true
     kubectl apply -f https://github.com/Dynatrace/dynatrace-operator/releases/download/v0.10.1/kubernetes.yaml
     kubectl -n dynatrace wait pod --for=condition=ready --selector=app.kubernetes.io/name=dynatrace-operator,app.kubernetes.io/component=webhook --timeout=300s
 
     kubectl -n dynatrace create secret generic keptn --from-literal="apiToken=$DT_OPERATOR_TOKEN" --from-literal="dataIngestToken=$DT_INGEST_TOKEN" | true
-    sed -e 's~DT_TENANT~'"$DT_TENANT"'~' ./setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
+    sed -e 's~DT_TENANT~'"$DT_TENANT"'~' -e 's~K8S_CLUSTERNAME~'"$K8S_CLUSTERNAME"'~' ./setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
     kubectl apply -f dynakube_10_tmp.yaml
     rm dynakube_10_tmp.yaml
 }
 
 function install_klt {
-    echo "STEP: Installing Keptn Lifecycle Toolkit"
-    # TODO: planned with 0.6.0 -> no need for cert-manager
-    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.yaml
-    kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
+    echo "STEP: Installing Keptn Lifecycle Toolkit $KLT_VERSION"
+    # REMOVED: since 0.6 no need for cert-manager anymore
+    # kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.yaml
+    # kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
 
     kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml
     kubectl wait --for=condition=Available deployment/klc-controller-manager -n ${TOOLKIT_NAMESPACE} --timeout=120s

@@ -1,10 +1,11 @@
 apiVersion: dynatrace.com/v1beta1
 kind: DynaKube
 metadata:
-  name: keptn
+  name: K8S_CLUSTERNAME
   namespace: dynatrace
   annotations:
     feature.dynatrace.com/automatic-kubernetes-api-monitoring: "true"
+    feature.dynatrace.com/label-version-detection: "true"
 spec:
   # Dynatrace apiUrl including the `/api` path at the end.
   # For SaaS, set `YOUR_ENVIRONMENT_ID` to your environment ID.
@@ -111,7 +112,7 @@ spec:
       # env: []
       env:
         - name: ONEAGENT_ENABLE_VOLUME_STORAGE
-          value: "false"
+          value: "true"
 
       # Optional: arguments to add to the OneAgent installer.
       # Available options: https://www.dynatrace.com/support/help/shortlink/linux-custom-installation
@@ -130,6 +131,8 @@ spec:
     capabilities:
       - routing
       - kubernetes-monitoring
+      - dynatrace-api
+      - metrics-ingest
 
     # Optional: to use a custom ActiveGate Docker image.
     # image: ""
