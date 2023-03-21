@@ -1,5 +1,4 @@
-
-apiVersion: lifecycle.keptn.sh/v1alpha1
+apiVersion: lifecycle.keptn.sh/v1alpha3
 kind: KeptnEvaluationDefinition
 metadata:
   name: evaluate-dependencies
@@ -8,9 +7,10 @@ spec:
   objectives:
     - keptnMetricRef:
         name: available-cpus
+        namespace: simplenode-dev
       evaluationTarget: ">4"
 ---
-apiVersion: lifecycle.keptn.sh/v1alpha1
+apiVersion: lifecycle.keptn.sh/v1alpha3
 kind: KeptnEvaluationDefinition
 metadata:
   name: evaluate-deployment
@@ -19,4 +19,5 @@ spec:
   objectives:
     - keptnMetricRef:
         name: available-cpus
+        namespace: simplenode-dev
       evaluationTarget: ">4"
