@@ -91,6 +91,13 @@ function install_oneagent {
     sed -e 's~DT_TENANT~'"$DT_TENANT"'~' -e 's~K8S_CLUSTERNAME~'"$K8S_CLUSTERNAME"'~' ./setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
     kubectl apply -f dynakube_10_tmp.yaml
     rm dynakube_10_tmp.yaml
+}
+
+function configure_dynatrace {
+    if [[ "$DT_TENANT" == "none" ]] || [[ "$DT_OPERATOR_TOKEN" == "none" ]] ||[[ "$DT_INGEST_TOKEN" == "none" ]]; then 
+        echo "SKIP STEP: Not installing Dynatrace OneAgent as DT_TENANT, DT_OPERATOR_TOKEN or DT_INGEST_TOKEN not set"
+        return;
+    fi
 
     # now update the dynatrace settings for k8s cluster
     KUBESYSTEM_UUID=$(kubectl get namespace kube-system --output jsonpath={.metadata.uid})
@@ -117,6 +124,7 @@ function install_oneagent {
         -H "Authorization: Api-Token ${DT_OPERATOR_TOKEN}" \
         --data "$CURL_DATA"
 }
+
 
 function install_klt {
     echo "STEP: Installing Keptn Lifecycle Toolkit $KLT_VERSION"
@@ -217,6 +225,7 @@ install_oneagent
 install_klt
 install_observabilty
 install_argocd
+configure_dynatrace
 setup_slacknotification
 create_argocdapp
 print_info
