@@ -1,13 +1,13 @@
+
 apiVersion: lifecycle.keptn.sh/v1alpha1
 kind: KeptnEvaluationDefinition
 metadata:
   name: evaluate-dependencies
   namespace: simplenode-dev
 spec:
-  source: prometheus
   objectives:
-    - name: cpu capacity
-      query: "sum(kube_node_status_capacity{resource='cpu'})"
+    - keptnMetricRef:
+        name: available-cpus
       evaluationTarget: ">4"
 ---
 apiVersion: lifecycle.keptn.sh/v1alpha1
@@ -16,8 +16,7 @@ metadata:
   name: evaluate-deployment
   namespace: simplenode-dev
 spec:
-  source: prometheus
   objectives:
-    - name: cpu capacity
-      query: "sum(kube_node_status_capacity{resource='cpu'})"
+    - keptnMetricRef:
+        name: available-cpus
       evaluationTarget: ">4"

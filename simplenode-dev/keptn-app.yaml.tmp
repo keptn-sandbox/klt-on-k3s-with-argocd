@@ -1,12 +1,12 @@
-apiVersion: lifecycle.keptn.sh/v1alpha2
+apiVersion: lifecycle.keptn.sh/v1alpha3
 kind: KeptnApp
 metadata:
-  name: simplenode
+  name: simpleapp
   namespace: simplenode-dev
 spec:
   version: "1.0.0"
   workloads:
-    - name: simplenode-workload
+    - name: simplenode
       version: 1.0.2
   preDeploymentEvaluations:
     - app-pre-deploy-eval
