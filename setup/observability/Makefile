@@ -6,7 +6,7 @@ TOOLKIT_NAMESPACE ?= keptn-lifecycle-toolkit-system
 GRAFANA_PORT_FORWARD ?= 3000
 
 .PHONY: install
-install:
+install: install-cert-manager
 
 	@echo "-----------------------------------"
 	@echo "Create Namespace and install Jaeger"
@@ -62,6 +62,14 @@ install:
 	@echo "#######################################################"
 	@echo "Observability Demo installed"
 	@echo "#######################################################"
+
+.PHONY: install-cert-manager
+install-cert-manager:
+	@echo "-----------------------------------"
+	@echo "Create Namespace and install CertManager"
+	@echo "-----------------------------------"
+	kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
+	kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
 
 .PHONY: uninstall
 uninstall:
