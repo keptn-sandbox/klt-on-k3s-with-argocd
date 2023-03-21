@@ -96,7 +96,8 @@ function install_klt {
     # kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.yaml
     # kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
 
-    kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml
+    kubectl create ns ${TOOLKIT_NAMESPACE} | true
+    kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml -n ${TOOLKIT_NAMESPACE}
     kubectl wait --for=condition=Available deployment/klc-controller-manager -n ${TOOLKIT_NAMESPACE} --timeout=120s
 }
 
