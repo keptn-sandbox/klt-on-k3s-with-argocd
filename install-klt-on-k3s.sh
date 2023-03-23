@@ -136,6 +136,9 @@ function install_klt {
     kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml -n ${TOOLKIT_NAMESPACE}
     kubectl wait --for=condition=Available deployment/lifecycle-operator -n ${TOOLKIT_NAMESPACE} --timeout=120s
 
+    # adding KeptnConfig, e.g: for OTelEndpoint configuration (this was moved to config with 0.7)
+    kubectl apply -f ./setup/keptn/keptnconfig.yaml
+
     # MOVED TO HELM INSTALL WITH KLT 0.7.0
     # helm repo add klt https://charts.lifecycle.keptn.sh
     # helm repo update
