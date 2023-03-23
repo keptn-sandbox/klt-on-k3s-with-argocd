@@ -493,7 +493,7 @@ data:
               "operation": "$Workload/WorkloadPreDeployTasks",
               "queryType": "search",
               "refId": "A",
-              "service": "keptn-lifecycle-operator",
+              "service": "lifecycle-operator",
               "tags": ""
             }
           ],
