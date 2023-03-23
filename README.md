@@ -58,8 +58,8 @@ Security: http, https & ssl ports open
 Make sure you are on the latest updates and have curl and git installed!
 ```
 sudo yum update -y
-sudo yum curl -y
-sudo yum git -y
+sudo yum install curl -y
+sudo yum install git -y
 ```
 
 ```
@@ -262,8 +262,8 @@ You should now see the new App in ArgoCD and ArgoCD doing its work. If everythin
 This automation works and was tested on Amazon Linux2 with installed curl and git. If you dont have it do the following:
 ```
 sudo yum update -y
-sudo yum curl -y
-sudo yum git -y
+sudo yum install curl -y
+sudo yum install git -y
 ```
 
 With **Amazon Linux 2023** it seems that you also need to install the k3s-selinux policy:
