@@ -37,7 +37,8 @@ function install_tools {
         sudo yum install jq -y
         sudo yum install tree -y
         sudo wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
-        sudo yum install docker
+        sudo yum install docker -y
+        sudo yum install make -y
 
         # install helm (since KLT 0.7.0 we moved from manifest to helm)
         sudo curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash 
@@ -69,6 +70,10 @@ function install_k3s {
 function set_ingress_domain {
     if [[ "${INGRESS_DOMAIN}" == "none" ]]; then
         INGRESS_DOMAIN=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4).nip.io
+    fi 
+
+    if [[ "${INGRESS_DOMAIN}" == "" ]]; then
+        INGRESS_DOMAIN=$(curl -s http://checkip.amazonaws.com).nip.io
     fi 
 
     echo "Using INGRESS_DOMAIN: ${INGRESS_DOMAIN}"
