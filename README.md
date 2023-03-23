@@ -1,6 +1,6 @@
 # Keptn Lifecycle Toolkit Demo on k3s, with ArgoCD, Prometheus, Grafana and Slack
 
-**The current version of this tutorial installs Keptn Lifecycle Toolkit v0.5.0**
+**The current version of this tutorial installs Keptn Lifecycle Toolkit v0.7.0**
 
 This is a demo tutorial repository for [Keptn Lifecycle Toolkit (KLT)](https://lifecycle.keptn.sh/)
 
@@ -129,18 +129,10 @@ dynatrace   keptn   https://abc12345.live.dynatrace.com/api   keptn    Running  
 
 ## 4. Install Keptn Lifecycle Toolkit (KLT)
 
-First we install the Cert Manager
+Now we install the KLT
 ```
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.10.0/cert-manager.yaml
-kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
-
-```
-
-Then the Keptn Lifecycle Toolkit itself
-```
-kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/v0.4.1/manifest.yaml
-kubectl wait --for=condition=Available deployment/klc-controller-manager -n keptn-lifecycle-toolkit-system --timeout=120s
-
+kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/v0.7.0/manifest.yaml
+kubectl wait --for=condition=Available deployment/lifecycle-operator -n keptn-lifecycle-toolkit-system --timeout=120s
 ```
 
 **VALIDATE STEP**
