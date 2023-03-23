@@ -54,10 +54,11 @@ Security: http, https & ssl ports open
 ```
 
 **Install updates and tools:**
+
+Make sure you have curl and git installed!
+
 ```
 sudo yum update -y
-sudo yum install git -y
-sudo yum install curl -y
 sudo yum install jq -y
 sudo yum install tree -y
 sudo wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
@@ -244,6 +245,9 @@ You should now see the new App in ArgoCD and ArgoCD doing its work. If everythin
 # Automated Demo Installation
 
 ## 1. Pre-Requ Steps
+
+This automation works and was tested on Amazon Linux2 with installed curl and git
+
 Above steps can be mostly automated but you need to do this:
 **Do Step 2: Clone the Repo**
 ```

@@ -32,8 +32,8 @@ function install_tools {
     if [[ "${INSTALL_TOOLS}" == "true" ]]; then
         echo "STEP: Installing Tools"
         sudo yum update -y
-        sudo yum install git -y
-        sudo yum install curl -y
+        # sudo yum install git -y
+        # sudo yum install curl -y
         sudo yum install jq -y
         sudo yum install tree -y
         sudo wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
