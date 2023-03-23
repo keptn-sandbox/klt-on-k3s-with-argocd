@@ -69,12 +69,8 @@ function install_k3s {
 
 function set_ingress_domain {
     if [[ "${INGRESS_DOMAIN}" == "none" ]]; then
-        INGRESS_DOMAIN=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4).nip.io
-    fi 
-
-    if [[ "${INGRESS_DOMAIN}" == "" ]]; then
         INGRESS_DOMAIN=$(curl -s http://checkip.amazonaws.com).nip.io
-    fi 
+    fi
 
     echo "Using INGRESS_DOMAIN: ${INGRESS_DOMAIN}"
 }
