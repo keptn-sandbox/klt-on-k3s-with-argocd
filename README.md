@@ -55,17 +55,30 @@ Security: http, https & ssl ports open
 
 **Install updates and tools:**
 
-Make sure you have curl and git installed!
+Make sure you are on the latest updates and have curl and git installed!
+```
+sudo yum update -y
+sudo yum curl -y
+sudo yum git -y
+```
 
 ```
 sudo yum update -y
 sudo yum install jq -y
+sudo yum install make -y
 sudo yum install tree -y
 sudo wget https://github.com/mikefarah/yq/releases/download/3.4.1/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
-sudo yum install docker
+sudo yum install docker -y
 ```
 
-**Install k3s:**
+**Install k3s selinux policy:**
+Since Amazon Linux 2023 it seems that we need to install k3s-selinux policy. You get an error with instructions during the k3s installation - but - here are the two commands:
+```
+sudo dnf install -y container-selinux
+sudo dnf install -y https://rpm.rancher.io/k3s/stable/common/centos/8/noarch/k3s-selinux-1.2-2.el8.noarch.rpm
+```
+
+**Install k3s::**
 ```
 sudo curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="644"  sh -
 ```
@@ -246,7 +259,18 @@ You should now see the new App in ArgoCD and ArgoCD doing its work. If everythin
 
 ## 1. Pre-Requ Steps
 
-This automation works and was tested on Amazon Linux2 with installed curl and git
+This automation works and was tested on Amazon Linux2 with installed curl and git. If you dont have it do the following:
+```
+sudo yum update -y
+sudo yum curl -y
+sudo yum git -y
+```
+
+With **Amazon Linux 2023** it seems that you also need to install the k3s-selinux policy:
+```
+sudo dnf install -y container-selinux
+sudo dnf install -y https://rpm.rancher.io/k3s/stable/common/centos/8/noarch/k3s-selinux-1.2-2.el8.noarch.rpm
+```
 
 Above steps can be mostly automated but you need to do this:
 **Do Step 2: Clone the Repo**
