@@ -188,7 +188,7 @@ rm otel-collector-with-dt_tmp.yaml
 
 ```
 
-Now ltes restart collector to read the new configmap
+Now lets restart collector to read the new configmap
 ```
 kubectl rollout restart deployment -n keptn-lifecycle-toolkit-system otel-collector
 kubectl wait --for=condition=available deployment/otel-collector -n keptn-lifecycle-toolkit-system --timeout=120s
