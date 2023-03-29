@@ -376,6 +376,24 @@ config:
         K8S-Logging.Exclude On
 
     [FILTER]
+        Name nest
+        Match kube.*
+        Operation lift
+        Nested_under kubernetes
+        Add_prefix   kubernetes_
+
+    [FILTER]
+        Name grep
+        Match kube.*
+        Exclude kubernetes_container_name fluent-bit
+        
+    [FILTER]
+        Name nest
+        Match kube.*
+        Operation lift
+        Nested_under kubernetes_labels                
+
+    [FILTER]
         Name modify
         Match kube.*
         Rename log content
