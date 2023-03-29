@@ -5,6 +5,7 @@ set -eu
 # Shall we install tooling, k3s?
 INSTALL_TOOLS=${INSTALL_TOOLS:-true}
 INSTALL_K3S=${INSTALL_K3S:-true}
+INSTALL_FLUENTBIT=${INSTALL_FLUENTBIT:-false}
 
 # version defaults
 KLT_VERSION=${KLT_VERSION:-v0.7.0}
@@ -126,6 +127,34 @@ function configure_dynatrace {
         --data "$CURL_DATA"
 }
 
+function install_fluentbit {
+    if [[ "${INSTALL_FLUENTBIT}" == "true" ]]; then
+        echo "STEP: Installing FluentBit"
+
+        helm repo add fluent https://fluent.github.io/helm-charts
+
+        # for Dynatrace we use a different values.yaml that has the right outputs and filters defined
+        if [[ "$DT_TENANT" == "none" ]] || [[ "$DT_OPERATOR_TOKEN" == "none" ]] ||[[ "$DT_INGEST_TOKEN" == "none" ]]; then 
+
+            KUBESYSTEM_UUID=$(kubectl get namespace kube-system --output jsonpath={.metadata.uid})
+            KUBERNETES_CLUSTERNAME="keptn"
+            sed -e 's~DT_URL_TO_REPLACE~'"$DT_TENANT"'~' \
+                -e 's~DT_TOKEN_TO_REPLACE~'"$DT_OTEL_INGEST_TOKEN"'~' \
+                -e 's~DT_KUBERNETES_CLUSTER_NAME_TO_REPLACE~'"$KUBERNETES_CLUSTERNAME"'~' \
+                -e 's~DT_KUBERNETES_CONFIG_ID_TO_REPLACE~'"$KUBESYSTEM_UUID"'~' \
+                ./setup/fluentbit/values-with-dt.yaml > fluentbit_values_tmp.yaml
+        else 
+            cp ./setup/fluentbit/values.yaml ./fluentbit_values_tmp.yaml
+        fi
+
+        # install fluentbit
+        helm upgrade --install fluent-bit fluent/fluent-bit --values ./fluentbit_values_tmp.yaml
+
+        # remove tmp values file
+        rm ./fluentbit_values_tmp.yaml
+    fi 
+}
+
 
 function install_klt {
     echo "STEP: Installing Keptn Lifecycle Toolkit $KLT_VERSION"
@@ -230,6 +259,7 @@ install_klt
 install_observabilty
 install_argocd
 configure_dynatrace
+install_fluentbit
 setup_slacknotification
 create_argocdapp
 print_info
