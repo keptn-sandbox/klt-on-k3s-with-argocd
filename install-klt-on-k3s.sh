@@ -148,7 +148,7 @@ function install_fluentbit {
         fi
 
         # install fluentbit
-        helm upgrade --install fluent-bit fluent/fluent-bit --values ./fluentbit_values_tmp.yaml
+        helm upgrade --install fluent-bit fluent/fluent-bit --values ./fluentbit_values_tmp.yaml --kubeconfig /etc/rancher/k3s/k3s.yaml
 
         # remove tmp values file
         rm ./fluentbit_values_tmp.yaml
