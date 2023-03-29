@@ -340,7 +340,6 @@ networkPolicy:
 
 luaScripts: {}
 
-## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/configuration-file
 config:
   service: |
     [SERVICE]
@@ -353,8 +352,6 @@ config:
         HTTP_Listen 0.0.0.0
         HTTP_Port {{ .Values.metricsPort }}
         Health_Check On
-
-  ## https://docs.fluentbit.io/manual/pipeline/inputs
   inputs: |
     [INPUT]
         Name tail
@@ -369,8 +366,6 @@ config:
         Tag host.*
         Systemd_Filter _SYSTEMD_UNIT=kubelet.service
         Read_From_Tail On
-
-  ## https://docs.fluentbit.io/manual/pipeline/filters
   filters: |
     [FILTER]
         Name kubernetes
@@ -403,9 +398,7 @@ config:
         Rate     800
         Window   3
         Print_Status  true
-        Interval 30s        
-
-  ## https://docs.fluentbit.io/manual/pipeline/outputs
+        Interval 30s
   outputs: |
     [OUTPUT]
         name  http
