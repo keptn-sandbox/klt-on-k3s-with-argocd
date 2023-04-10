@@ -255,6 +255,15 @@ You should now see the new App in ArgoCD and ArgoCD doing its work. If everythin
 3. Get data in the Keptn Grafana Dashboards
 4. See Open Telemetry Traces for the deployment
 
+## 10. (optional) Install FluentBit for Log Forwarding
+
+If you want your logs to be forwarded you can [install FluentBit](https://docs.fluentbit.io/manual/installation/getting-started-with-fluent-bit) as explained here:
+```
+helm repo add fluent https://fluent.github.io/helm-charts
+helm upgrade --install fluent-bit fluent/fluent-bit --values ./setup/fluentbit/values.yaml
+```
+
+
 # Automated Demo Installation
 
 ## 1. Pre-Requ Steps
