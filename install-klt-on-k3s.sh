@@ -95,8 +95,9 @@ function install_oneagent {
     kubectl apply -f dynakube_10_tmp.yaml
     rm dynakube_10_tmp.yaml
 
-    # create secret in the lifecycle toolkit namespace for potential dynatrace metric queries
-    kubectl -n ${TOOLKIT_NAMESPACE} create secret generic dynatrace --from-literal="DT_TOKEN=$DT_API_TOKEN" | true
+    # create secret in the simplenode namespace for potential dynatrace metric queries
+    kubectl create ns simplenode-dev | true
+    kubectl -n simplenode-dev create secret generic dynatrace --from-literal="DT_TOKEN=$DT_API_TOKEN" | true
 }
 
 function configure_dynatrace {
