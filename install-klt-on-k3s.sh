@@ -22,6 +22,7 @@ DT_TENANT=${DT_TENANT:-none}
 DT_OPERATOR_TOKEN=${DT_OPERATOR_TOKEN:-none}
 DT_INGEST_TOKEN=${DT_INGEST_TOKEN:-none}
 DT_OTEL_INGEST_TOKEN=${DT_OTEL_INGEST_TOKEN:-none}
+DT_API_TOKEN=${DT_API_TOKEN:-none}
 
 # Shall we setup the Slack Webhook integration? if so - set SLACK_HOOK=YOURHOOKAAAAAAAA/BBBBBBB/CCCCCCCC
 SLACK_HOOK=${SLACK_HOOK:-none}
@@ -93,6 +94,9 @@ function install_oneagent {
     sed -e 's~DT_TENANT~'"$DT_TENANT"'~' -e 's~K8S_CLUSTERNAME~'"$K8S_CLUSTERNAME"'~' ./setup/dynatrace/dynakube_10.yaml > dynakube_10_tmp.yaml
     kubectl apply -f dynakube_10_tmp.yaml
     rm dynakube_10_tmp.yaml
+
+    # create secret in the lifecycle toolkit namespace for potential dynatrace metric queries
+    kubectl -n ${TOOLKIT_NAMESPACE} create secret generic dynatrace --from-literal="DT_TOKEN=$DT_API_TOKEN" | true
 }
 
 function configure_dynatrace {
