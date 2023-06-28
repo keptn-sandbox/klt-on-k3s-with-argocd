@@ -41,10 +41,14 @@ install: install-cert-manager
 	@echo "----------------------------------"
 	@echo "Restart Keptn Lifecycle Controller"
 	@echo "----------------------------------"
-	kubectl rollout restart deployment -n "$(TOOLKIT_NAMESPACE)" keptn-klt-lifecycle-operator
-	kubectl rollout status deployment -n "$(TOOLKIT_NAMESPACE)" keptn-klt-lifecycle-operator --watch
-	kubectl rollout restart deployment -n "$(TOOLKIT_NAMESPACE)" keptn-klt-scheduler
-	kubectl rollout status deployment -n "$(TOOLKIT_NAMESPACE)" keptn-klt-scheduler --watch
+	kubectl rollout restart deployment -n "$(TOOLKIT_NAMESPACE)" lifecycle-operator
+	kubectl rollout status deployment -n "$(TOOLKIT_NAMESPACE)" lifecycle-operator --watch
+	kubectl rollout restart deployment -n "$(TOOLKIT_NAMESPACE)" scheduler
+	kubectl rollout status deployment -n "$(TOOLKIT_NAMESPACE)" scheduler --watch
+#	kubectl rollout restart deployment -n "$(TOOLKIT_NAMESPACE)" keptn-klt-lifecycle-operator
+#	kubectl rollout status deployment -n "$(TOOLKIT_NAMESPACE)" keptn-klt-lifecycle-operator --watch
+#	kubectl rollout restart deployment -n "$(TOOLKIT_NAMESPACE)" keptn-klt-scheduler
+#	kubectl rollout status deployment -n "$(TOOLKIT_NAMESPACE)" keptn-klt-scheduler --watch
 
 
 	@echo ""
