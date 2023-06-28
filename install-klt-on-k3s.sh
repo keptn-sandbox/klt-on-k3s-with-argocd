@@ -8,7 +8,8 @@ INSTALL_K3S=${INSTALL_K3S:-true}
 INSTALL_FLUENTBIT=${INSTALL_FLUENTBIT:-false}
 
 # version defaults
-KLT_VERSION=${KLT_VERSION:-v0.7.0}
+KLT_VERSION=${KLT_VERSION:-v0.8.0}
+KLT_HELM_VERSION=${KLT_HELM_VERSION:-v0.2.4}
 K3S_VERSION=${K3S_VERSION:-v1.25}
 
 # namespace for KLT
@@ -168,16 +169,17 @@ function install_klt {
     # kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=60s
 
     # kubectl create ns ${TOOLKIT_NAMESPACE} | true
-    kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml -n ${TOOLKIT_NAMESPACE}
-    kubectl wait --for=condition=Available deployment/lifecycle-operator -n ${TOOLKIT_NAMESPACE} --timeout=120s
+    # kubectl apply -f https://github.com/keptn/lifecycle-toolkit/releases/download/$KLT_VERSION/manifest.yaml -n ${TOOLKIT_NAMESPACE}
+    # kubectl wait --for=condition=Available deployment/lifecycle-operator -n ${TOOLKIT_NAMESPACE} --timeout=120s
 
     # adding KeptnConfig, e.g: for OTelEndpoint configuration (this was moved to config with 0.7)
     kubectl apply -f ./setup/keptn/keptnconfig.yaml
 
     # MOVED TO HELM INSTALL WITH KLT 0.7.0
-    # helm repo add klt https://charts.lifecycle.keptn.sh
-    # helm repo update
-    # helm upgrade --install keptn klt/klt --version ${KLT_VERSION} -n ${TOOLKIT_NAMESPACE} --create-namespace --wait
+    helm repo add klt https://charts.lifecycle.keptn.sh
+    helm repo update
+    helm search repo klt
+    helm upgrade --install keptn klt/klt --version ${KLT_HELM_VERSION} -n ${TOOLKIT_NAMESPACE} --create-namespace --wait
 }
 
 function install_observabilty {
