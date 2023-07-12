@@ -87,7 +87,7 @@ data:
                 "uid": "P1809F7CD0C75ACF3"
               },
               "editorMode": "builder",
-              "expr": "count(keptn_deployment_count{keptn_deployment_workload_name=\"$Workload\", keptn_deployment_workload_status=\"Succeeded\"})",
+              "expr": "count(keptn_deployment_count_total{keptn_deployment_workload_name=\"$Workload\", keptn_deployment_workload_status=\"Succeeded\"})",
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
@@ -226,7 +226,7 @@ data:
                 "uid": "P1809F7CD0C75ACF3"
               },
               "editorMode": "builder",
-              "expr": "count(keptn_deployment_count{keptn_deployment_workload_name=\"$Workload\", keptn_deployment_workload_status=\"Failed\"})",
+              "expr": "count(keptn_deployment_count_total{keptn_deployment_workload_name=\"$Workload\", keptn_deployment_workload_status=\"Failed\"})",
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
